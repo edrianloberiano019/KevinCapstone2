@@ -2,14 +2,13 @@ import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
-function CustomerListChild() {
+function SupplierList() {
     const [customers, setCustomers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
 
     const fetchCustomers = async () => {
-        setLoading(true);
-        const customerCollection = collection(db, 'customerusers');
+        const customerCollection = collection(db, 'supplier');
         const customerSnapshot = await getDocs(customerCollection);
         const customerList = customerSnapshot.docs.map(doc => ({
             id: doc.id,
@@ -27,7 +26,7 @@ function CustomerListChild() {
     const filteredCustomers = customers.filter(customer => {
         const searchLower = searchQuery.toLowerCase();
         return (
-            (customer.id && customer.id.toLowerCase().includes(searchLower)) ||
+            (customer.id && String(customer.id).toLowerCase().includes(searchLower)) ||
             (customer.name && customer.name.toLowerCase().includes(searchLower)) ||
             (customer.contact && customer.contact.toLowerCase().includes(searchLower))
         );
@@ -37,7 +36,7 @@ function CustomerListChild() {
         <div className='bg-white rounded-xl pb-10 w-full'>
             <div className='w-full'>
                 <div className='flex justify-between w-full'>
-                    <div className='mt-8 text-left ml-10'>Customer List</div>
+                    <div className='mt-8 text-left ml-10 text-2xl'>Supplier List</div>
                     <div className='flex pt-7'>
                         <input
                             className='flex text-lg bg-gray-200 px-4 rounded-l-lg'
@@ -60,6 +59,7 @@ function CustomerListChild() {
                         <div className='w-full text-left text-xl border-t-2 bg-gray-200 border-l-2 pl-4 py-2'>Contact</div>
                         <div className='w-full text-left text-xl bg-gray-200 border-l-2 border-t-2 border-r-2 pl-4 py-2'>Status</div>
                     </div>
+
                     {loading ? (
                         <div className="flex justify-center items-center mt-10">
                             <div className="w-10 h-10 border-4 border-blue-500 border-solid rounded-full border-t-transparent animate-spin"></div>
@@ -86,4 +86,4 @@ function CustomerListChild() {
     );
 }
 
-export default CustomerListChild;
+export default SupplierList;

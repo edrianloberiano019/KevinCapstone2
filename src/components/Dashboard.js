@@ -1,65 +1,138 @@
-import React from 'react'
+    import React, { useEffect, useState } from 'react';
+    import { collection, getDocs } from 'firebase/firestore';
+    import { db } from '../firebase';
+    import { toast } from 'react-toastify';
 
-function Dashboard() {
-    return (
-        <div>
-            <div className='w-full flex flex-row gap-5 px-10'>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Cash Sales</div>
-                        <div>71456</div>
-                    </div>
-                </div>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Credit Sales</div>
-                        <div>71456</div>
-                    </div>
-                </div>
-                <div className='flex w-full  bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Lease Sales</div>
-                        <div>71456</div>
-                    </div>
-                </div>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Stock Sales</div>
-                        <div>71456</div>
-                    </div>
-                </div>
+    function Dashboard({ setSelectedView}) {
+        const [customerCount, setCustomerCount] = useState(0);
+        const [supplierCount, setSupplierCount] = useState(0);
+        const [productCount, setProductCount] = useState(0);
+        const [loading, setLoading] = useState(true);
 
+        const fetchCustomerCount = async () => {
+            try {
+                const customerCollection = collection(db, 'customerusers');
+                const customerSnapshot = await getDocs(customerCollection);
+                setCustomerCount(customerSnapshot.size);
+                setLoading(false)
+            } catch (error) {
+                toast.error("Error fetching customer count: ", error);
+            }
+        };
+
+        const fetchProductCount = async () => {
+            try {
+                const productCollection = collection(db, 'products');
+                const productSnapshot = await getDocs(productCollection);
+                setProductCount(productSnapshot.size);
+            } catch (error) {
+                toast.error("Error fetching customer count: ", error);
+            }
+        };
+
+        const fetchSupplierCount = async () => {
+            try {
+                const supplierCollection = collection(db, 'supplier');
+                const supplierSnapshot = await getDocs(supplierCollection);
+                setSupplierCount(supplierSnapshot.size);
+            } catch (error) {
+                toast.error("Error fetching supplier count: ", error);
+            }
+        };
+
+        useEffect(() => {
+            const fetchCounts = async () => {
+                setLoading(true);
+                await Promise.all([fetchCustomerCount(), fetchSupplierCount(), fetchProductCount()]);
+                setLoading(false);
+            };
+            fetchCounts();
+        }, []);
+
+
+        const totalUsers = customerCount + supplierCount;
+
+        return (
+            <div className='mt-10'>
+                <div className='w-full flex flex-row gap-5 px-10'>
+                    <div className='flex w-full bg-white rounded-xl z-20 hover:z-10 drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Total Users</div>
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                            <div className='text-3xl'>{loading ? 'Loading...' : totalUsers}</div>
+                            )}
+                        </div>
+                    </div>
+                    <button onClick={() => setSelectedView('clist')} className='flex   z-20 hover:z-10 w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Customers</div>
+
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                                <div className='text-3xl'>{customerCount}</div>
+                            )}
+                        </div>
+                    </button>
+                    <button onClick={() => setSelectedView('supplierlist')} className='flex w-full bg-white  z-20 hover:z-10 rounded-xl drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Suppliers</div>
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                            <div className='text-3xl'>{loading ? 'Loading...' : supplierCount}</div>
+                            )}
+                        </div>
+                    </button>
+                </div>
+                <div className='w-full flex mt-5 flex-row gap-5 px-10'>
+                    <button onClick={() => setSelectedView('productlist')} className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Products</div>
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                            <div className='text-3xl'>{loading ? 'Loading...' : productCount}</div>
+                            )}
+                        </div>
+                    </button>
+                    <button onClick={() => setSelectedView('')} className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Total Sales</div>
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                            <div className='text-3xl'>{loading ? 'Loading...' : productCount}</div>
+                            )}
+                        </div>
+                    </button>
+                    <button onClick={() => setSelectedView('productlist')} className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
+                        <div className='pr-20 pl-6 py-10 text-left'>
+                            <div className='flex text-sm'>Products</div>
+                            {loading ? (
+                                <div className="flex justify-start items-center mt-4 ">
+                                    <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
+                                </div>
+                            ) : (
+                            <div className='text-3xl'>{loading ? 'Loading...' : productCount}</div>
+                            )}
+                        </div>
+                    </button>
+                </div>
             </div>
-            <div className='w-full flex flex-row mt-5 gap-5 px-10'>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Users</div>
-                        <div>118</div>
-                    </div>
-                </div>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Customers</div>
-                        <div>619</div>
-                    </div>
-                </div>
-                <div className='flex w-full  bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Stores</div>
-                        <div>71456</div>
-                    </div>
-                </div>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10'>
-                        <div className='flex text-sm'>Products</div>
-                        <div>71456</div>
-                    </div>
-                </div>
+        );
+    }
 
-            </div>
-
-        </div>
-    )
-}
-
-export default Dashboard
+    export default Dashboard;

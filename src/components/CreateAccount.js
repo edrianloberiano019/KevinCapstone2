@@ -38,7 +38,7 @@ function CreateAccount() {
 
 
   return (
-    <div className="flex ">
+    <div className="flex p-5">
     <div className='flex w-full '>
       <div className="flex justify-center items-center rounded-xl drop-shadow-md w-[400px] bg-[#347928]">
         <form onSubmit={handleRegister}>

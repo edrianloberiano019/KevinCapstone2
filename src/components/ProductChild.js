@@ -13,9 +13,9 @@ function ProductChild() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [categories, setCategories] = useState([]);
     const [customer, setCustomer] = useState([]);
-    const [isCustomerFound, setIsCustomerFound] = useState(false);
+    const [setIsCustomerFound] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState('');
-    const [customerName, setCustomerName] = useState('');
+    const [setCustomerName] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {

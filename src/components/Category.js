@@ -10,7 +10,7 @@ function Category() {
     const [searchTermInList, setSearchTermInList] = useState(''); // New state for category list search
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);
-    const [loading3, setLoading3] = useState(false);
+    const [setLoading3] = useState(false);
     const [categoryDocId, setCategoryDocId] = useState('');
     const [foundItem, setFoundItem] = useState(false);
     const [categories, setCategories] = useState([]);
@@ -35,7 +35,7 @@ function Category() {
 
     useEffect(() => {
         fetchCategories();
-    }, []);
+    },);
 
     const handleSearchCategory = async () => {
         if (!searchTerm.trim()) return;

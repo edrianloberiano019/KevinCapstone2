@@ -2,30 +2,9 @@ import { useState } from "react";
 import React from 'react';
 
 function Sidebar({ setSelectedView }) {
-    const [openDropdown, setOpenDropdown] = useState("");
-    const [openBackground, setBackground] = useState(false);
     const [selectedItem, setSelectedItem] = useState('dashboard');
 
 
-    const toggleDropdown = (dropdown) => {
-        if (openDropdown === dropdown) {
-            setOpenDropdown("");
-        } else {
-            setOpenDropdown(dropdown);
-        }
-    };
-
-    const customer = () => {
-        toggleDropdown('students')
-    }
-
-    const supplier = () => {
-        toggleDropdown('supplier')
-    }
-
-    const productier = () => {
-        toggleDropdown('product')
-    }
 
     const handleItemClick = (item) => {
         setSelectedItem(item);

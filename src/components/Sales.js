@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where, addDoc, setDoc, doc, getDoc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc} from "firebase/firestore";
 import { db } from '../firebase';
 import { toast } from "react-toastify";
 import { format } from 'date-fns';
@@ -23,7 +23,7 @@ function Sales() {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [amountTendered, setAmountTendered] = useState('');
     const [change, setChange] = useState(0);
-    const [canSave, setCanSave] = useState(false);
+    const [setCanSave] = useState(false);
     const [showReceipt, setShowReceipt] = useState(false);
     const [transactionData, setTransactionData] = useState(null);
 
@@ -62,7 +62,6 @@ function Sales() {
     }, []);
 
     const handleOpenPaymentModal = () => {
-        const totalAmount = cart.reduce((total, item) => total + item.totalAmount, 0);
         setChange(0);
         setAmountTendered('');
         setShowPaymentModal(true);

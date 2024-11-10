@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 
 function AdminSidebar({setSelectedView}) {
     const [openDropdown, setOpenDropdown] = useState("");
-    const [openBackground, setBackground] = useState(false);
     const [selectedItem, setSelectedItem] = useState('dashboard');
 
 

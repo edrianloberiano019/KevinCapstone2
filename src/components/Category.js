@@ -7,7 +7,7 @@ import LoadingButtons from './LoadingButtons';
 function Category() {
     const [categoryName, setCategoryName] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchTermInList, setSearchTermInList] = useState('');
+    const [searchTermInList, setSearchTermInList] = useState(''); // New state for category list search
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);
     const [loading3, setLoading3] = useState(false);
@@ -125,8 +125,9 @@ function Category() {
         }
     };
 
+    // Filter categories based on the search term
     const filteredCategories = categories.filter(category =>
-        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) 
+        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) // Search in list only
     );
 
     return (
@@ -206,7 +207,7 @@ function Category() {
                         </button>
                     </div>
                 </div>
-                <div className='overflow-x-auto'>
+                <div className='overflow-x-auto mt-5'>
                     {filteredCategories.length === 0 ? (
                         <div>No categories found</div>
                     ) : (
@@ -217,6 +218,7 @@ function Category() {
                                     <th className="p-2">Category Name</th>
                                 </tr>
                             </thead>
+                            {loading3 ? '': ''}
                             <tbody>
                                 {filteredCategories.map((category, index) => (
                                     <tr key={category.id} className="border-b-2 border-l-2 border-r-2 text-white">

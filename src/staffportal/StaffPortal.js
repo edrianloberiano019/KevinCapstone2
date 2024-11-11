@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Inventory from '../components/Inventory';
 import CustomerList from '../components/CustomerList';
-import Dashboard from '../components/Dashboard';
 import CustomerListChild from '../components/CustomerListChild';
 import WalaPa from '../components/WalaPa';
 import SupplierCreateAccount from '../components/SupplierCreateAccount';
@@ -20,15 +19,15 @@ function StaffPortal() {
 
   return (
     <div className="h-screen flex">
-      <div className=" h-full sticky top-0 z-20">
+      <div className=" h-full sticky top-0 z-20 hidden md:block">
         <Sidebar setSelectedView={setSelectedView} />
       </div>
       <div className="w-full flex flex-col overflow-y-auto h-screen">
         <div className="sticky top-0 z-30">
-          <Navbar />
+          <Navbar  setSelectedView={setSelectedView} />
         </div>
         <div className="pt-16 flex-grow bg-[#C0EBA6]">
-          {selectedView === 'dashboard' && <Dashboard setSelectedView={setSelectedView} />}
+          {selectedView === 'dashboard' && <DashboardStaff setSelectedView={setSelectedView} />}
           {selectedView === 'clist' && <h1 className='flex w-full text-2xl'><CustomerListChild /></h1>}
           {selectedView === 'wp' && <WalaPa />}
           {selectedView === 'sca' && <h1 className='flex w-full  text-2xl'><SupplierCreateAccount /></h1>} 

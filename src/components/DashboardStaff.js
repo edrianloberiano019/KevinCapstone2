@@ -14,7 +14,7 @@ function Dashboard({ setSelectedView }) {
             const customerCollection = collection(db, 'customerusers');
             const customerSnapshot = await getDocs(customerCollection);
             setCustomerCount(customerSnapshot.size);
-            setLoading(false)
+            setLoading(false);
         } catch (error) {
             toast.error("Error fetching customer count: ", error);
         }
@@ -26,7 +26,7 @@ function Dashboard({ setSelectedView }) {
             const productSnapshot = await getDocs(productCollection);
             setProductCount(productSnapshot.size);
         } catch (error) {
-            toast.error("Error fetching customer count: ", error);
+            toast.error("Error fetching product count: ", error);
         }
     };
 
@@ -49,65 +49,51 @@ function Dashboard({ setSelectedView }) {
         fetchCounts();
     }, []);
 
-
     const totalUsers = customerCount + supplierCount;
 
     return (
-        <div className='mt-10'>
-            <div className='w-full flex flex-row gap-5 px-10'>
-                <div className='flex w-full bg-white rounded-xl z-20 hover:z-10 drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10 text-left'>
-                        <div className='flex text-sm'>Total Users</div>
+        <div className='mt-10 px-4 sm:px-10'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
+                <div className='flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105'>
+                    <div className='pr-6 sm:pr-10 pl-4 py-6 text-left'>
+                        <div className='text-sm'>Total Users</div>
                         {loading ? (
-                            <div className="flex justify-start items-center mt-4 ">
-                                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
-                            </div>
+                            <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
                         ) : (
-                            <div className='text-3xl'>{loading ? 'Loading...' : totalUsers}</div>
+                            <div className='text-2xl sm:text-3xl'>{totalUsers}</div>
                         )}
                     </div>
                 </div>
-                <div className='flex   z-20 hover:z-10 w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10 text-left'>
-                        <div className='flex text-sm'>Customers</div>
-
+                <div className='flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105'>
+                    <div className='pr-6 sm:pr-10 pl-4 py-6 text-left'>
+                        <div className='text-sm'>Customers</div>
                         {loading ? (
-                            <div className="flex justify-start items-center mt-4 ">
-                                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
-                            </div>
+                            <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
                         ) : (
-                            <div className='text-3xl'>{customerCount}</div>
+                            <div className='text-2xl sm:text-3xl'>{customerCount}</div>
                         )}
                     </div>
                 </div>
-                <div className='flex w-full bg-white  z-20 hover:z-10 rounded-xl drop-shadow-md hover:drop-shadow-2xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10 text-left'>
-                        <div className='flex text-sm'>Suppliers</div>
+                <div className='flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105'>
+                    <div className='pr-6 sm:pr-10 pl-4 py-6 text-left'>
+                        <div className='text-sm'>Suppliers</div>
                         {loading ? (
-                            <div className="flex justify-start items-center mt-4 ">
-                                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
-                            </div>
+                            <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
                         ) : (
-                            <div className='text-3xl'>{loading ? 'Loading...' : supplierCount}</div>
+                            <div className='text-2xl sm:text-3xl'>{supplierCount}</div>
                         )}
                     </div>
                 </div>
-            </div>
-            <div className='w-full flex mt-5 flex-row gap-5 px-10'>
-                <div className='flex w-full bg-white rounded-xl drop-shadow-md hover:drop-shadow-xl transition-all hover:scale-105'>
-                    <div className='pr-20 pl-6 py-10 text-left'>
-                        <div className='flex text-sm'>Products</div>
+                <div className='flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105'>
+                    <div className='pr-6 sm:pr-10 pl-4 py-6 text-left'>
+                        <div className='text-sm'>Products</div>
                         {loading ? (
-                            <div className="flex justify-start items-center mt-4 ">
-                                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin"></div>
-                            </div>
+                            <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
                         ) : (
-                            <div className='text-3xl'>{loading ? 'Loading...' : productCount}</div>
+                            <div className='text-2xl sm:text-3xl'>{productCount}</div>
                         )}
                     </div>
                 </div>
-                <div className='w-full'></div>
-                <div className='w-full'></div>
             </div>
         </div>
     );

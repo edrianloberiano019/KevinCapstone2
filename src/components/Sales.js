@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, setDoc, doc} from "firebase/firestore";
+import { collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { db } from '../firebase';
 import { toast } from "react-toastify";
 import { format } from 'date-fns';
@@ -23,7 +23,7 @@ function Sales() {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [amountTendered, setAmountTendered] = useState('');
     const [change, setChange] = useState(0);
-    const [setCanSave] = useState(false);
+    const [canSave, setCanSave] = useState(false);
     const [showReceipt, setShowReceipt] = useState(false);
     const [transactionData, setTransactionData] = useState(null);
 
@@ -187,15 +187,15 @@ function Sales() {
     const handleCompleteTransaction = async () => {
         const totalAmount = cart.reduce((total, item) => total + item.totalAmount, 0);
         const tenderedAmount = parseFloat(amountTendered);
-    
+
         if (isNaN(tenderedAmount) || tenderedAmount < totalAmount) {
             toast.error("Amount tendered is less than the total amount.");
             return;
         }
-    
+
         const currentDate = new Date();
         const formattedDate = format(currentDate, 'yyyy-MM-dd');
-    
+
         const transactionData = {
             customerName,
             date: formattedDate,
@@ -207,25 +207,25 @@ function Sales() {
                 totalAmount: item.totalAmount,
             }))
         };
-    
+
         try {
             setLoading(true);
-    
+
             const transactionRef = doc(db, 'received', customerName);
             await setDoc(transactionRef, transactionData, { merge: true });
-    
+
             for (let item of cart) {
                 const selectedProduct = categories.find(product => product.name === item.productName);
                 const selectedVariant = selectedProduct.variants.find(variant => variant.name === item.variantName);
-    
+
                 if (selectedVariant) {
                     const updatedQuantity = selectedVariant.quantity - item.quantity;
                     const productRef = doc(db, 'products', selectedProduct.id);
-    
+
                     await setDoc(
                         productRef,
                         {
-                            variants: selectedProduct.variants.map(variant => 
+                            variants: selectedProduct.variants.map(variant =>
                                 variant.name === selectedVariant.name
                                     ? { ...variant, quantity: updatedQuantity }
                                     : variant
@@ -235,7 +235,7 @@ function Sales() {
                     );
                 }
             }
-    
+
             setTransactionData({
                 customerName,
                 date: formattedDate,
@@ -243,7 +243,7 @@ function Sales() {
                 totalAmount,
                 change: tenderedAmount - totalAmount
             });
-    
+
             setShowReceipt(true);
             setCart([]);
             toast.success('The transaction was success!');
@@ -254,7 +254,7 @@ function Sales() {
             setLoading(false);
         }
     };
-    
+
 
 
     const handleRemoveFromCart = (index) => {
@@ -267,10 +267,10 @@ function Sales() {
 
 
     return (
-        <div className='w-full bg-[#185519] mt-8 rounded-xl p-5 mx-10 text-2xl'>
-            <div className='flex items-center'>
+        <div className='w-full bg-[#185519] mt-8 rounded-xl p-5 mx-4 lg:mx-10 text-lg lg:text-2xl'>
+            <div className='flex flex-col lg:flex-row items-center '>
                 <select
-                    className="form-control py-2 px-3 text-black rounded-md text-lg bg-gray-200"
+                    className="form-control py-2 px-3 text-black rounded-md text-base lg:text-lg bg-gray-200 w-full lg:w-auto mb-4 lg:mb-0"
                     value={selectedCustomer}
                     onChange={(e) => handleCustomerChange(e.target.value)}
                 >
@@ -281,9 +281,9 @@ function Sales() {
                 </select>
             </div>
 
-            <div className='flex mt-5'>
+            <div className='grid flex-col lg:grid-cols-3 xl:grid-flow-col gap-y-3 md: mt-5 space-y-4 lg:space-y-0 lg:space-x-2 '>
                 <select
-                    className="form-control py-2 px-3 text-black rounded-md text-lg bg-gray-200"
+                    className="form-control py-2 px-3 text-black rounded-md text-base lg:text-lg bg-gray-200 w-full lg:w-auto"
                     value={selectedCategory}
                     onChange={(e) => handleCategoryChange(e.target.value)}
                     disabled={!isCustomerFound}
@@ -295,7 +295,7 @@ function Sales() {
                 </select>
 
                 <select
-                    className="form-control py-2 px-3 text-black rounded-md text-lg bg-gray-200 ml-2"
+                    className="form-control py-2 px-3 text-black rounded-md text-base lg:text-lg bg-gray-200 w-full lg:w-auto"
                     onChange={(e) => handleVariantChange(e.target.value)}
                     disabled={!isCustomerFound || !variants.length}
                 >
@@ -305,13 +305,13 @@ function Sales() {
                     ))}
                 </select>
 
-                <div className='ml-2'>
+                <div className='w-full flex items-center'>
                     <div className='px-3 rounded-md bg-gray-200 py-2'>Available Quantity: {selectedVariantQuantity}</div>
                 </div>
 
-                <div>
+                <div className='w-full lg:w-auto flex items-center'>
                     <input
-                        className='px-3 py-2 ml-2 rounded-md max-w-[100px] bg-gray-200'
+                        className='px-3 py-2 rounded-md bg-gray-200 w-full lg:max-w-[100px]'
                         placeholder='QTY'
                         type='number'
                         value={quantityInput}
@@ -320,51 +320,45 @@ function Sales() {
                             if (/^[1-9]\d*$/.test(value)) {
                                 setQuantityInput(value);
                             } else if (value === '') {
-                                setQuantityInput(''); 
+                                setQuantityInput('');
                             }
                         }}
                     />
-
                 </div>
 
-                <div>
+                <div className='w-full lg:w-auto flex items-center'>
                     <button
-                        className='bg-blue-700 px-3 py-2 ml-2 rounded-md text-white'
+                        className='bg-blue-700 px-3 py-2 rounded-md text-white w-full lg:w-auto'
                         onClick={handleAddToCart}
-                        disabled={
-                            !selectedVariant
-                        }
+                        disabled={!selectedVariant}
                     >
                         Add to cart
                     </button>
-
                 </div>
             </div>
 
-            <div className='mt-10'>
+            <div className='mt-10 overflow-x-auto'>
                 <h3 className='text-white mb-3'>Your Cart Items</h3>
-                <div className='flex w-full items-center text-black '>
-                    <div className='w-full border-l-2 border-t-2 border-b-2 border-white py-2 bg-white'>Product Name</div>
-                    <div className='w-full border-l-2 border-t-2 border-b-2 py-2 bg-white border-white'>Variant Name</div>
-                    <div className='w-full border-l-2 border-t-2 border-b-2 py-2 bg-white border-white'>Quantity</div>
-                    <div className='w-full border-2 py-2 bg-white border-white'>Total Amount</div>
-                    <div className='w-full border-2 py-2 bg-white border-white'>Remove</div>
+                <div className=' w-full items-center text-black grid grid-cols-1  lg:grid-cols-5'>
+                    <div className='w-full border-l-2 border-t-2  border-b-2 border-white py-2 bg-white'>Product Name</div>
+                    <div className='w-full border-l-2 h-full content-center border-t-2 border-b-2 py-2 bg-white border-white'>Variant Name</div>
+                    <div className='w-full h-full content-center  border-l-2 border-t-2 border-b-2 py-2 bg-white border-white'>Quantity</div>
+                    <div className='w-full border-2 py-2 h-full content-center bg-white border-white'>Total Amount</div>
+                    <div className='w-full border-2 h-full content-center py-2 bg-white border-white'>Remove</div>
                 </div>
                 {cart.map((item, index) => (
-                    <div key={index} className='flex w-full items-center text-white'>
+                    <div key={index} className='grid grid-cols-1 lg:grid-cols-5 w-full items-center text-white'>
                         <div className='w-full border-l-2 border-b-2 py-2'>{item.productName}</div>
                         <div className='w-full border-l-2 py-2 border-b-2'>{item.variantName}</div>
                         <div className='w-full border-l-2 py-2 border-b-2'>{item.quantity}</div>
-                        <div className='w-full border-l-2 border-b-2 border-r-2 py-2 '>{item.totalAmount}</div>
-                        <div className='w-full border-b-2 border-r-2 py-2 flex justify-center text-red-600 drop-shadow-md'>
-                            <button className='px-3 hover:scale-110 transition-all'
-                                onClick={() => handleRemoveFromCart(index)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+                        <div className='w-full border-l-2 border-b-2 border-r-2 py-2'>{item.totalAmount}</div>
+                        <div className='w-full border-b-2 border-r-2 py-2 h-full flex justify-center text-red-600'>
+                            <button className='px-3' onClick={() => handleRemoveFromCart(index)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                                     <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z" clip-rule="evenodd" />
                                 </svg>
-
+                          
                             </button>
-
                         </div>
                     </div>
                 ))}
@@ -372,7 +366,7 @@ function Sales() {
 
             <div className='mt-5 flex justify-end'>
                 <button
-                    className='bg-green-700 py-2 px-5  text-white rounded-md'
+                    className='bg-green-700 py-2 px-5 text-white rounded-md w-full lg:w-auto'
                     onClick={handleOpenPaymentModal}
                     disabled={!cart.length}
                 >

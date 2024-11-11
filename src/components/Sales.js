@@ -338,7 +338,7 @@ function Sales() {
             </div>
 
             <div className='mt-10 overflow-x-auto'>
-                <h3 className='text-white mb-3'>Your Cart Items</h3>
+                <h3 className='text-white mb-3'>Your Cart Items {canSave}</h3>
                 <div className=' w-full items-center text-black grid grid-cols-1  lg:grid-cols-5'>
                     <div className='w-full border-l-2 border-t-2  border-b-2 border-white py-2 bg-white'>Product Name</div>
                     <div className='w-full border-l-2 h-full content-center border-t-2 border-b-2 py-2 bg-white border-white'>Variant Name</div>

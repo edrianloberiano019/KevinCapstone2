@@ -24,7 +24,7 @@ function AdminPortal() {
         <AdminSidebar setSelectedView={setSelectedView} />
 
       </div>
-      <div className="w-full flex flex-col overflow-y-auto h-screezzx2n">
+      <div className="w-full flex flex-col overflow-y-auto h-screen">
         <div className="sticky top-0 z-30">
           <Navbar />
         </div>

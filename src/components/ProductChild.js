@@ -175,6 +175,8 @@ function ProductChild() {
                     
                     </div>
                 </div>
+                <div className='hidden'>{customerFound}{customerName}
+                </div>
 
                 <div className="flex flex-col">
                     <div className='flex items-center mt-5'>

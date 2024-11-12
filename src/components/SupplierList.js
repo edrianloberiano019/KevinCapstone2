@@ -35,9 +35,9 @@ function SupplierList() {
     return (
         <div className='bg-white rounded-xl pb-10 w-full'>
             <div className='w-full'>
-                <div className='flex justify-between w-full'>
+                <div className='grid grid-cols-1 xl:flex justify-between w-full'>
                     <div className='mt-8 text-left ml-10 text-2xl'>Supplier List</div>
-                    <div className='flex pt-7'>
+                    <div className='hidden pt-7 ml-10 xl:flex'>
                         <input
                             className='flex text-lg bg-gray-200 px-4 rounded-l-lg'
                             placeholder='Search'
@@ -52,7 +52,11 @@ function SupplierList() {
                         </button>
                     </div>
                 </div>
-                <div>
+                
+                <div className='block xl:hidden'>
+                    <div className='py-10 text-center'>The product list is only available in PC view.</div>
+                </div>
+                <div className='hidden xl:block'>
                     <div className='flex px-10 pt-2'>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 border-gray-200 pl-4 py-2'>ID</div>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Name</div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Navbar from '../components/Navbar'
+import AdminNavbar from '../components/AdminNavbar'
 import AdminSidebar from '../components/AdminSidebar'
 import CreateAccount from '../components/CreateAccount';
 import Inventory from '../components/Inventory';
@@ -16,7 +16,7 @@ import Category from '../components/Category';
 import DashboardStaff from '../components/DashboardStaff'
 
 function AdminPortal() {
-  const [selectedView, setSelectedView] = useState('home');
+  const [selectedView, setSelectedView] = useState('dashboard');
 
   return (
     <div className='h-screen flex '>
@@ -24,21 +24,21 @@ function AdminPortal() {
         <AdminSidebar setSelectedView={setSelectedView} />
 
       </div>
-      <div className="w-full flex flex-col overflow-y-auto h-screen">
+      <div className="w-full flex flex-col overflow-y-auto h-screen overflow-x-hidden">
         <div className="sticky top-0 z-30">
-          <Navbar />
+          <AdminNavbar setSelectedView={setSelectedView}  />
         </div>
-        <div className=' bg-[#C0EBA6] pt-16 flex-grow'>
+        <div className=' bg-[#C0EBA6] pt-16 flex-grow '>
           {selectedView === "ca" && <h1 className='w-full rounded-lg overflow-hidden '><CreateAccount /></h1>}
           {selectedView === 'dashboard' && <Dashboard setSelectedView={setSelectedView} />}
-          {selectedView === 'clist' && <h1 className='flex w-full text-2xl'><CustomerListChild /></h1>}
+          {selectedView === 'clist' && <h1 className='flex w-full text-2xl p-5'><CustomerListChild /></h1>}
           {selectedView === 'wp' && <WalaPa />}
           {selectedView === 'sca' && <h1 className='flex w-full  text-2xl'><SupplierCreateAccount /></h1>}
           {selectedView === 'inventory' && <Inventory />}
           {selectedView === 'customer' && <h1 className='flex w-full'><CustomerList /></h1>}
-          {selectedView === 'productadd' && <h1 className='flex w-full ml-8 mt-8 text-2xl'><ProductChild /></h1>}
-          {selectedView === 'productlist' && <ProductList />}
-          {selectedView === 'supplierlist' && <SupplierList />}
+          {selectedView === 'productadd' && <h1 className='flex w-full ml-8 mt-8 pr-14 text-2xl overflow-hidden'><ProductChild /></h1>}
+          {selectedView === 'productlist' && <h1 className='flex w-full p-5'><ProductList /></h1>}
+          {selectedView === 'supplierlist' && <h1 className='p-5'><SupplierList /></h1>}
           {selectedView === 'sale' && <h1 className='flex w-full h-full pb-5'><Sales /></h1>}
           {selectedView === 'cate' && <h1 className='flex w-full'><Category /></h1>}
           {selectedView === 'inv' && <h1 className='flex w-full'><Inventory /></h1>}

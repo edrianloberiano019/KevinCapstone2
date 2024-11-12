@@ -125,31 +125,33 @@ function Category() {
         }
     };
 
-    // Filter categories based on the search term
     const filteredCategories = categories.filter(category =>
-        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) // Search in list only
+        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) 
     );
 
     return (
-        <div className="w-full flex mr-5 p-5 rounded-xl gap-5 justify-center items-start">
-            <div className="bg-[#185519] p-5 rounded-xl w-[40%]">
+        <div className="w-full grid grid-cols-1 xl:flex mr-5 p-5 rounded-xl gap-5 justify-center items-start">
+            <div className="bg-[#185519] p-5 rounded-xl w-full xl:w-[40%] ">
                 <div>
-                    <div className="flex justify-between">
-                        <div className="text-2xl text-left text-white">Category Form</div>
-                        <div className='bg-white text-2xl flex items-center rounded-md px-3 py-2'>
-                            <input
-                                className='outline-none'
-                                type="search"
-                                placeholder='Search'
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                            <button onClick={handleSearchCategory}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-8 outline-none">
-                                    <path d="M8.25 10.875a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
-                                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 4.5a4.125 4.125 0 1 0 2.338 7.524l2.007 2.006a.75.75 0 1 0 1.06-1.06l-2.006-2.007a4.125 4.125 0 0 0-3.399-6.463Z" clipRule="evenodd" />
-                                </svg>
-                            </button>
+                    <div className=" justify-between grid grid-cols-1 xl:flex">
+                        <div className="text-2xl text-left text-white xl:mr-5">Category Form</div>
+                        <div className='bg-white text-2xl grid mt-4  xl:mt-0 items-center rounded-md px-3 py-2 '>
+                            <div className='flex  '>
+                                <input
+                                    className='w-full outline-none '
+                                    type="search"
+                                    placeholder='Search'
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <button onClick={handleSearchCategory}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-8 outline-none">
+                                        <path d="M8.25 10.875a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
+                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 4.5a4.125 4.125 0 1 0 2.338 7.524l2.007 2.006a.75.75 0 1 0 1.06-1.06l-2.006-2.007a4.125 4.125 0 0 0-3.399-6.463Z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                            
+                            </div>
                         </div>
                     </div>
                     <form onSubmit={handleSaveCategory}>
@@ -188,12 +190,12 @@ function Category() {
                 </div>
             </div>
 
-            <div className='w-[60%] bg-[#185519] p-5 rounded-xl'>
+            <div className='xl:w-[60%]  w-full bg-[#185519] p-5 rounded-xl'>
                 <div className='flex justify-between'>
                     <div className='text-2xl text-white text-left'>Category List</div>
                     <div className='flex bg-white px-3 py-2 rounded-md overflow-hidden'>
                         <input
-                            className='text-2xl outline-none '
+                            className='text-2xl w-full outline-none '
                             type='search'
                             placeholder='Search in List'
                             value={searchTermInList}

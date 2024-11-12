@@ -48,26 +48,29 @@ function ProductListChild() {
     });
 
     return (
-        <div className='flex bg-white rounded-xl pb-10 w-full'>
-            <div className='w-full'>
-                <div className='flex justify-between w-full'>
-                    <div className='text-left mt-8 ml-10'>Product List</div>
-                    <div className='flex pt-7'>
+        <div className='flex   w-full'>
+            <div className='w-full pb-10 bg-white rounded-xl'>
+                <div className='xl:flex  grid grid-cols-1 justify-between w-full'>
+                    <div className='text-left flex mt-8 ml-10 w-full'>Product List</div>
+                    <div className=' pt-7 w-full px-6 xl:px-0 hidden xl:flex'>
                         <input
-                            className='flex text-lg bg-gray-200 px-4 rounded-l-lg'
+                            className='flex w-full text-lg bg-gray-200 px-4 rounded-l-lg'
                             placeholder='Search'
                             type='search'
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-                        <button className='bg-gray-200 mr-10 px-4 rounded-r-lg'>
+                        <button className='bg-gray-200 xl:mr-10 px-4 rounded-r-lg'>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
                                 <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5ZM2.25 10.5a8.25 8.25 0 1 1 14.59 5.28l4.69 4.69a.75.75 0 1 1-1.06 1.06l-4.69-4.69A8.25 8.25 0 0 1 2.25 10.5Z" clipRule="evenodd" />
                             </svg>
                         </button>
                     </div>
                 </div>
-                <div>
+                <div className='block xl:hidden'>
+                    <div className='py-10 text-center'>The product list is only available in PC view.</div>
+                </div>
+                <div className='hidden xl:block'>
                     <div className='flex px-10 pt-2'>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 border-gray-200 pl-4 py-2'>Category</div>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Product Name</div>
@@ -83,11 +86,11 @@ function ProductListChild() {
                             <div className="w-10 h-10 border-4 border-blue-500 border-solid rounded-full border-t-transparent animate-spin"></div>
                         </div>
                     ) : (
-                        <ul className='px-10'>
+                        <ul className='px-10 '>
                             {filteredProducts.map(product => (
                                 <div className='flex border-b-2' key={product.id}>
                                     <div className='w-full text-left text-xl border-l-2 border-gray-200 pl-4 py-4'>{product.category}</div>
-                                    <div className='w-full text-left text-xl  border-l-2 pl-4 py-4'>{product.name}</div>
+                                    <div className='w-full text-left text-xl  overflow-hidden  border-l-2 pl-4 py-4'>{product.name}</div>
                                     <div className='w-[70%] text-left text-xl border-l-2 pl-4 py-4'>{product.expirationDate}</div>
                                     <div className='w-full text-left text-xl border-l-2 border-r-2 pl-4 py-4'>
                                         {product.variants && product.variants.length > 0 ? (

@@ -36,7 +36,7 @@ function CustomerListChild() {
     return (
         <div className='bg-white rounded-xl pb-10 w-full'>
             <div className='w-full'>
-                <div className='flex justify-between w-full'>
+                <div className='hidden xl:flex justify-between w-full'>
                     <div className='mt-8 text-left ml-10'>Customer List</div>
                     <div className='flex pt-7'>
                         <input
@@ -53,7 +53,11 @@ function CustomerListChild() {
                         </button>
                     </div>
                 </div>
-                <div>
+                
+                <div className='block xl:hidden'>
+                    <div className='py-10 text-center text-base'>The customer list is only available in PC view.</div>
+                </div>
+                <div className='hidden xl:block'>
                     <div className='flex px-10 pt-2'>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 border-gray-200 pl-4 py-2'>ID</div>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Name</div>

@@ -3,6 +3,7 @@ import React from 'react';
 
 function Sidebar({ setSelectedView }) {
     const [selectedItem, setSelectedItem] = useState('dashboard');
+    const [openDropdown, setOpenDropdown] = useState("");
 
 
 
@@ -10,33 +11,44 @@ function Sidebar({ setSelectedView }) {
         setSelectedItem(item);
         setSelectedView(item);
     };
+    const productier = () => {
+        toggleDropdown('product')
+    }
+
+    const toggleDropdown = (dropdown) => {
+        if (openDropdown === dropdown) {
+            setOpenDropdown("");
+        } else {
+            setOpenDropdown(dropdown);
+        }
+    };
 
     return (
 
         <div className='w-[350px] bg-[#347928] h-full justify-center items-center content-center'>
             <div className="">
-            <button onClick={() => handleItemClick('dash')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
+                <button onClick={() => handleItemClick('dash')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
                 ${selectedItem === 'sales' ? 'bg-[#2d6823]' : ''}`}>
-                <div className='flex '>
-                    <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                    <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-                    <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-                  </svg>
-                  
+                    <div className='flex '>
+                        <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
+                                <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
+                            </svg>
 
 
 
 
+
+                        </div>
+                        <div
+                            className='text-lg  text-[#FFFBE6] '
+                        >
+                            Home
+                        </div>
                     </div>
-                    <div
-                        className='text-lg  text-[#FFFBE6] '
-                    >
-                        Home
-                    </div>
-                </div>
 
-            </button>
+                </button>
                 <button onClick={() => handleItemClick('sale')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
                     ${selectedItem === 'sales' ? 'bg-[#2d6823]' : ''}`}>
                     <div className='flex '>
@@ -58,7 +70,69 @@ function Sidebar({ setSelectedView }) {
                     </div>
 
                 </button>
-            
+                <div>
+
+                        <button
+                            onClick={() => productier()}
+                            className="flex hover:pl-16 text-left w-full pl-12 py-3 transition-all hover:bg-[#2d6823] duration-200"
+                        >
+                            <div className='flex '>
+                                <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                    <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375Z" />
+                                    <path fill-rule="evenodd" d="m3.087 9 .54 9.176A3 3 0 0 0 6.62 21h10.757a3 3 0 0 0 2.995-2.824L20.913 9H3.087Zm6.163 3.75A.75.75 0 0 1 10 12h4a.75.75 0 0 1 0 1.5h-4a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                                </svg>
+
+
+
+                                </div>
+                                <div
+                                    className='text-lg  text-[#FFFBE6] '
+                                >
+                                    Product
+                                </div>
+                            </div>
+                        </button>
+
+                        <div
+                            className={`overflow-hidden transition-all duration-300 ease-in-out ${openDropdown === "product" ? "max-h-40" : "max-h-0"
+                                }`}
+                        >
+                            <button onClick={() => handleItemClick('productadd')}
+                                className={`text-lg  text-[#FFFBE6] block py-3 text-left w-full px-4 pl-24 hover:pl-28 transition-all duration-200 hover:bg-[#2d6823]
+                                ${selectedItem === 'productadd' ? 'bg-[#2d6823]' : ''}`}>
+                                <div className="flex content-center items-center">
+                                    <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                            <path d="M3.375 4.5C2.339 4.5 1.5 5.34 1.5 6.375V13.5h12V6.375c0-1.036-.84-1.875-1.875-1.875h-8.25ZM13.5 15h-12v2.625c0 1.035.84 1.875 1.875 1.875h.375a3 3 0 1 1 6 0h3a.75.75 0 0 0 .75-.75V15Z" />
+                                            <path d="M8.25 19.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0ZM15.75 6.75a.75.75 0 0 0-.75.75v11.25c0 .087.015.17.042.248a3 3 0 0 1 5.958.464c.853-.175 1.522-.935 1.464-1.883a18.659 18.659 0 0 0-3.732-10.104 1.837 1.837 0 0 0-1.47-.725H15.75Z" />
+                                            <path d="M19.5 19.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z" />
+                                        </svg>
+                                    </div>
+                                    <div
+                                        className='text-lg  text-[#FFFBE6] '
+                                    >
+                                        Change or add
+                                    </div>
+                                </div>
+                            </button>
+                            <button onClick={() => handleItemClick('productlist')}
+                                className={`text-lg  text-[#FFFBE6] block py-3 text-left w-full px-4 pl-24 hover:pl-28 transition-all duration-200 hover:bg-[#2d6823]
+                                    ${selectedItem === 'productlist' ? 'bg-[#2d6823]' : ''}`}>
+                                <div className="flex content-center items-center px-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5 mr-2">
+                                        <path fill-rule="evenodd" d="M7.502 6h7.128A3.375 3.375 0 0 1 18 9.375v9.375a3 3 0 0 0 3-3V6.108c0-1.505-1.125-2.811-2.664-2.94a48.972 48.972 0 0 0-.673-.05A3 3 0 0 0 15 1.5h-1.5a3 3 0 0 0-2.663 1.618c-.225.015-.45.032-.673.05C8.662 3.295 7.554 4.542 7.502 6ZM13.5 3A1.5 1.5 0 0 0 12 4.5h4.5A1.5 1.5 0 0 0 15 3h-1.5Z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
+                                    </svg>
+
+
+                                    <div className="text-lg">List</div>
+
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
             </div>
         </div>
     );

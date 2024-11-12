@@ -309,9 +309,9 @@ function Sales() {
                     <div className='px-3 rounded-md bg-gray-200 py-2'>Available Quantity: {selectedVariantQuantity}</div>
                 </div>
 
-                <div className='w-full lg:w-auto flex items-center'>
+                <div className='w-full lg:w-auto flex ml-3 items-center'>
                     <input
-                        className='px-3 py-2 rounded-md bg-gray-200 w-full lg:max-w-[100px]'
+                        className='px-3 py-2 md:ml-2 h-full rounded-md bg-gray-200 w-full lg:max-w-[100px]'
                         placeholder='QTY'
                         type='number'
                         value={quantityInput}
@@ -328,7 +328,7 @@ function Sales() {
 
                 <div className='w-full lg:w-auto flex items-center'>
                     <button
-                        className='bg-blue-700 px-3 py-2 rounded-md text-white w-full lg:w-auto'
+                        className='bg-blue-700 h-full px-3 py-2 rounded-md text-white w-full lg:w-auto'
                         onClick={handleAddToCart}
                         disabled={!selectedVariant}
                     >

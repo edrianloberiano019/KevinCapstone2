@@ -31,7 +31,7 @@ function AdminSidebar({setSelectedView}) {
       }; 
 
   return (
-    <div className='w-[350px] bg-[#347928] h-full'>
+    <div className='w-[350px] bg-[#347928] hidden md:block h-full'>
             <div className='flex w-full h-full justify-center items-center content-center'>
                 <div className='w-full '>
                     

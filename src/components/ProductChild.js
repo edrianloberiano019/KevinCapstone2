@@ -13,9 +13,9 @@ function ProductChild() {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [categories, setCategories] = useState([]);
     const [customer, setCustomer] = useState([]);
-    const [setIsCustomerFound] = useState(false);
+    const [customerFound, setIsCustomerFound] = useState(false);
     const [selectedCustomer, setSelectedCustomer] = useState('');
-    const [setCustomerName] = useState('');
+    const [customerName, setCustomerName] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -151,16 +151,16 @@ function ProductChild() {
     const handleRemoveVariant = (index) => setVariants(variants.filter((_, i) => i !== index));
 
     return (
-        <div className='bg-[#185519] p-5 rounded-xl'>
+        <div className='bg-[#185519] w-full p-5 rounded-xl '>
             <div>
-                <div className="flex w-full justify-between ">
+                <div className="grid-cols-1 grid lg:flex  w-full justify-between ">
                     <div className='flex items-center '>
                         <h1 className='w-full text-left uppercase text-white' >Changing or adding product</h1>
 
                     </div>
-                    <div className='flex'>
+                    <div className='flex  mt-4 xl:mt-0'>
                         <input
-                            className="bg-gray-200 rounded-l-md text-lg px-3 outline-none py-2 ml-16"
+                            className="bg-gray-200 w-full rounded-l-md text-lg px-3 outline-none py-2 "
                             type="search"
                             placeholder="Search product name"
                             value={searchQuery}
@@ -179,7 +179,7 @@ function ProductChild() {
                 <div className="flex flex-col">
                     <div className='flex items-center mt-5'>
                         <select
-                            className="form-control py-2 px-3 text-black rounded-md text-lg bg-gray-200"
+                            className="form-control w-full py-2 px-3 text-black rounded-md text-lg bg-gray-200"
                             value={selectedCustomer}
                             onChange={(e) => handleCustomerChange(e.target.value)}
                         >
@@ -189,7 +189,7 @@ function ProductChild() {
                             ))}
                         </select>
                     </div>
-                    <div className='flex mt-1 items-end gap-4'>
+                    <div className='grid grid-cols-1 xl:flex mt-1 items-end gap-4'>
 
                         <div className='w-full'>
                             <input
@@ -203,7 +203,7 @@ function ProductChild() {
                         </div>
                         <div className='flex h-full'>
                             <select
-                                className="form-control py-2 px-3 text-black pr-2 rounded-md text-lg bg-gray-200"
+                                className="form-control py-2 w-full px-3 text-black pr-2 rounded-md text-lg bg-gray-200"
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                                 disabled={!selectedCustomer} 
@@ -220,7 +220,7 @@ function ProductChild() {
                         <div>
                             <div className='text-base text-left pl-3 text-white'>Expiration date</div>
                             <input
-                                className='text-lg bg-gray-200 px-3 py-2  rounded-md'
+                                className='text-lg bg-gray-200 px-3 py-2 w-full  rounded-md'
                                 type='date'
                                 value={expirationDate}
                                 onChange={(e) => setExpirationDate(e.target.value)}
@@ -230,7 +230,7 @@ function ProductChild() {
                     </div>
 
                     {variants.map((variant, index) => (
-                        <div className="flex mt-5" key={index}>
+                        <div className="grid grid-cols-1 xl:flex gap-3 mt-5 " key={index}>
                             <input
                                 className="w-full bg-gray-200 rounded-md text-lg px-3 py-2"
                                 placeholder="Variant Name"
@@ -238,18 +238,19 @@ function ProductChild() {
                                 onChange={(e) => handleVariantChange(index, 'name', e.target.value)}
                             />
                             <input
-                                className="w-[40%] bg-gray-200 rounded-md text-lg px-3 py-2 ml-2"
+                                className="w-full xl:w-[40%] bg-gray-200 rounded-md text-lg px-3 py-2 "
                                 placeholder="Quantity"
                                 type="number"
                                 value={variant.quantity}
                                 onChange={(e) => handleVariantChange(index, 'quantity', e.target.value)}
                             />
-                            <div className='flex bg-gray-200 rounded-md ml-2'>
+                            
+                            <div className='flex bg-gray-200 rounded-md '>
                                 <div className='flex content-center items-center pl-2'>
                                     <div className='text-lg text-center'>PHP</div>
                                 </div>
                                 <input
-                                    className=" bg-gray-200 focus:outline-none w-full rounded-md text-lg px-3 py-2 ml-2"
+                                    className=" bg-gray-200 focus:outline-none w-full rounded-md text-lg px-3 py-2"
                                     placeholder="Price"
                                     type="number"
                                     value={variant.price}

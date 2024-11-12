@@ -99,11 +99,11 @@ function SupplierCreateAccount() {
   return (
     <div className='flex justify-start content-start m-5 w-[600px] items-start text-left bg-[#185519] px-6 py-10 rounded-xl'>
       <form onSubmit={handleSubmit}>
-        <div className='flex justify-between items-center'>
+        <div className='grid grid-cols-1 lg:flex justify-between items-center'>
           <div className='text-center text-white'>Supplier Form</div>
-          <div className='flex bg-white rounded-md'>
+          <div className='flex bg-white rounded-md mt-3 xl:mt-0'>
             <input
-              className='text-2xl px-3 py-2 rounded-md'
+              className='text-2xl px-3 w-full py-2 rounded-md'
               placeholder='Search by name'
               type='search'
               value={searchInput}

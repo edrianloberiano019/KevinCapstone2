@@ -49,9 +49,9 @@ function ProductListChild() {
 
     return (
         <div className='flex   w-full'>
-            <div className='w-full pb-10 bg-white rounded-xl'>
+            <div className='w-full pb-10 bg-white  bg-opacity-90 backdrop-blur-sm drop-shadow-md rounded-xl'>
                 <div className='xl:flex  grid grid-cols-1 justify-between w-full'>
-                    <div className='text-left flex mt-8 ml-10 w-full'>Product List</div>
+                    <div className='text-left flex mt-8 ml-10 w-full '>Product List</div>
                     <div className=' pt-7 w-full px-6 xl:px-0 hidden xl:flex'>
                         <input
                             className='flex w-full text-lg bg-gray-200 px-4 rounded-l-lg'

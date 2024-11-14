@@ -47,7 +47,7 @@ function Dashboard({ setSelectedView }) {
       const receivedCollection = collection(db, 'received');
       const receivedSnapshot = await getDocs(receivedCollection);
       const sales = receivedSnapshot.docs.map(doc => doc.data());
-      
+
       const salesByMonth = {};
       const months = [
         '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06',
@@ -60,7 +60,7 @@ function Dashboard({ setSelectedView }) {
 
       sales.forEach(sale => {
         const date = sale.date;
-        const monthYear = `${date.substring(0, 7)}`; // Extracts YYYY-MM from the date (e.g., 2024-11)
+        const monthYear = `${date.substring(0, 7)}`;
         if (salesByMonth[monthYear] !== undefined) {
           salesByMonth[monthYear] += 1;
         }
@@ -94,9 +94,9 @@ function Dashboard({ setSelectedView }) {
     <div className="mt-10 px-4 sm:px-10">
       <div className="grid grid-cols-1 sm:grid-cols-1 gap-5">
         <div className="flex w-flex gap-x-5">
-          <div className="flex bg-white rounded-xl w-full drop-shadow-md transition-all hover:scale-105">
+          <div className="flex bg-red-800 hover:bg-red-900 font-bold text-white backdrop-blur-md bg-opacity-70 rounded-xl w-full drop-shadow-md transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
-              <div className="text-sm">Total Users</div>
+              <div className="text-sm drop-shadow-md uppercase">Total Users</div>
               {loading ? (
                 <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
               ) : (
@@ -104,9 +104,9 @@ function Dashboard({ setSelectedView }) {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-xl w-full drop-shadow-md transition-all hover:scale-105">
+          <div className="flex hover:bg-blue-900 text-white backdrop-blur-md bg-opacity-70 font-bold drop-shadow-md bg-blue-800 rounded-xl w-full transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
-              <div className="text-sm">Customers</div>
+              <div className="text-sm uppercase">Customers</div>
               {loading ? (
                 <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
               ) : (
@@ -114,9 +114,9 @@ function Dashboard({ setSelectedView }) {
               )}
             </div>
           </div>
-          <div className="flex bg-white rounded-xl w-full drop-shadow-md transition-all hover:scale-105">
+          <div className="flex hover:bg-orange-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-orange-800 rounded-xl w-full drop-shadow-md transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
-              <div className="text-sm">Suppliers</div>
+              <div className="text-sm uppercase">Suppliers</div>
               {loading ? (
                 <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
               ) : (
@@ -126,9 +126,9 @@ function Dashboard({ setSelectedView }) {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-x-5">
-          <div className="flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105">
+          <div className="flex hover:bg-pink-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-pink-800 rounded-xl drop-shadow-md transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
-              <div className="text-sm">Products</div>
+              <div className="text-sm uppercase">Products</div>
               {loading ? (
                 <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
               ) : (
@@ -136,10 +136,9 @@ function Dashboard({ setSelectedView }) {
               )}
             </div>
           </div>
-
-          <div className="flex bg-white rounded-xl drop-shadow-md transition-all hover:scale-105">
+          <div className="flex hover:bg-yellow-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-yellow-800 rounded-xl drop-shadow-md transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
-              <div className="text-sm">Total Sales</div>
+              <div className="text-sm uppercase">Total Sales</div>
               {loading ? (
                 <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
               ) : (
@@ -149,7 +148,7 @@ function Dashboard({ setSelectedView }) {
           </div>
         </div>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 mb-5 backdrop-blur-md bg-opacity-80 px-5 rounded-xl drop-shadow-md py-2 text-black bg-white">
         <SalesAnalytics salesData={salesData} />
       </div>
     </div>

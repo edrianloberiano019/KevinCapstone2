@@ -13,10 +13,16 @@ import Sales from '../components/Sales';
 import Category from '../components/Category';
 import CreateAccount from '../components/CreateAccount'
 import DashboardStaff from '../components/DashboardStaff'
+import AnnouncementImage from '../images/bgKev.png'
 
 function StaffPortal() {
   const [selectedView, setSelectedView] = useState('dashboard');
-
+  
+  const appStyle = {
+    backgroundImage: `url(${AnnouncementImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
   return (
     <div className="h-screen flex">
       <div className=" h-full sticky top-0 z-20 hidden md:block">
@@ -26,7 +32,7 @@ function StaffPortal() {
         <div className="sticky top-0 z-30">
           <Navbar  setSelectedView={setSelectedView} />
         </div>
-        <div className="pt-16 flex-grow bg-[#C0EBA6] overflow-x-hidden">
+        <div className="pt-16 flex-grow overflow-x-hidden" style={appStyle}>
           {selectedView === 'dashboard' && <DashboardStaff setSelectedView={setSelectedView} />}
           {selectedView === 'clist' && <h1 className='flex w-full text-2xl'><CustomerListChild /></h1>}
           {selectedView === 'wp' && <WalaPa />}

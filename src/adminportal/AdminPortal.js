@@ -14,9 +14,16 @@ import SupplierList from '../components/SupplierList';
 import Sales from '../components/Sales';
 import Category from '../components/Category';
 import DashboardStaff from '../components/DashboardStaff'
+import AnnouncementImage from '../images/bgKev.png'
 
 function AdminPortal() {
   const [selectedView, setSelectedView] = useState('dashboard');
+  
+  const appStyle = {
+    backgroundImage: `url(${AnnouncementImage})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
 
   return (
     <div className='h-screen flex '>
@@ -28,7 +35,7 @@ function AdminPortal() {
         <div className="sticky top-0 z-30">
           <AdminNavbar setSelectedView={setSelectedView}  />
         </div>
-        <div className=' bg-[#C0EBA6] pt-16 flex-grow '>
+        <div className=' pt-16 flex-grow overflow-x-hidden'  style={appStyle}>
           {selectedView === "ca" && <h1 className='w-full rounded-lg overflow-hidden '><CreateAccount /></h1>}
           {selectedView === 'dashboard' && <Dashboard setSelectedView={setSelectedView} />}
           {selectedView === 'clist' && <h1 className='flex w-full text-2xl p-5'><CustomerListChild /></h1>}

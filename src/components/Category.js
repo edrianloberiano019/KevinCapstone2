@@ -131,7 +131,7 @@ function Category() {
 
     return (
         <div className="w-full grid grid-cols-1 xl:flex mr-5 p-5 rounded-xl gap-5 justify-center items-start">
-            <div className="bg-[#185519] p-5 rounded-xl w-full xl:w-[40%] ">
+            <div className="bg-[#185519] p-5 rounded-xl w-full xl:w-[40%]  backdrop-blur-[2px] bg-opacity-80 drop-shadow-md ">
                 <div>
                     <div className=" justify-between grid grid-cols-1 xl:flex">
                         <div className="text-2xl text-left text-white xl:mr-5">Category Form</div>
@@ -190,7 +190,7 @@ function Category() {
                 </div>
             </div>
 
-            <div className='xl:w-[60%]  w-full bg-[#185519] p-5 rounded-xl'>
+            <div className='xl:w-[60%]  w-full bg-[#185519] p-5 rounded-xl  backdrop-blur-[2px] bg-opacity-90 drop-shadow-md'>
                 <div className='flex justify-between'>
                     <div className='text-2xl text-white text-left'>Category List</div>
                     <div className='flex bg-white px-3 py-2 rounded-md overflow-hidden'>

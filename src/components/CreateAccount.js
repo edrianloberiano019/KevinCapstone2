@@ -41,7 +41,7 @@ function CreateAccount() {
     <div className='flex w-full '>
       <div className="flex justify-center items-center rounded-xl drop-shadow-md w-[400px] bg-[#347928]">
         <form onSubmit={handleRegister}>
-          <h3 className="text-3xl py-4 pt-5 text-[#FFFBE6]">Register your account</h3>
+          <h3 className="text-3xl py-4 pt-5 text-[#FFFBE6]">Register an account</h3>
           <div className="mb-3">
             <input
               type="text"

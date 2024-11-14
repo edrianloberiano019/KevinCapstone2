@@ -99,7 +99,7 @@ function CustomerList() {
   };
 
   return (
-    <div className='flex justify-start content-start m-5 w-[600px] items-start text-left bg-[#185519] px-6 py-10 rounded-xl'>
+    <div className='flex justify-start content-start m-5 w-[600px] items-start text-left bg-[#185519]  bg-opacity-80 backdrop-blur-[2px] drop-shadow-md px-6 py-10 rounded-xl'>
       <form onSubmit={handleSubmit}>
         <div className='xl:flex grid grid-cols-1 justify-between items-center'>
           <div className='text-left text-white text-2xl uppercase w-full'>Customer Form</div>

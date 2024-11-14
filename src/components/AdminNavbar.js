@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
+import image1 from '../images/LOGO2.jpg'
 
 function AdminNavbar({ setSelectedView }) {
     const navigate = useNavigate();
@@ -63,10 +64,11 @@ function AdminNavbar({ setSelectedView }) {
 
                     </div>
                 </button>
-                <div className='flex justify-center items-center content-center'>
-                    <div className='text-[#FFFBE6] text-xl font-bold ml-4 mb-1'>QVENT</div>
-
-                </div>
+                <button className='flex justify-center ml-2 items-center content-center'>
+                  <img className='w[40px] h-[40px] drop-shadow-md' src={image1} />
+                  <div className='text-[#FFFBE6] text-xl font-bold ml-1'>QVENT</div>
+        
+                </button>
                 <div>
                     <button onClick={handleLogout} className='text-md font-semibold text-[#FFFBE6]'> Logout</button>
                 </div>

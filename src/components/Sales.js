@@ -267,7 +267,7 @@ function Sales() {
 
 
     return (
-        <div className='w-full bg-[#185519] mt-8 rounded-xl p-5 mx-4 lg:mx-10 text-lg lg:text-2xl'>
+        <div className='w-full bg-[#185519] bg-opacity-80 backdrop-blur-sm drop-shadow-md mt-8 rounded-xl p-5 mx-4 lg:mx-10 text-lg lg:text-2xl'>
             <div className='flex flex-col lg:flex-row items-center '>
                 <select
                     className="form-control py-2 px-3 text-black rounded-md text-base lg:text-lg bg-gray-200 w-full lg:w-auto mb-4 lg:mb-0"

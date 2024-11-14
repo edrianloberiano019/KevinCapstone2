@@ -39,7 +39,7 @@ function Navbar({ setSelectedView }) {
           </div>
         </button>
         <button className='flex justify-center ml-2 items-center content-center'>
-          <img className='w[40px] h-[40px] drop-shadow-md' src={image1} />
+          <img className='w[40px] h-[40px] drop-shadow-md' src={image1} alt='hha' />
           <div className='text-[#FFFBE6] text-xl font-bold ml-1'>QVENT</div>
 
         </button>

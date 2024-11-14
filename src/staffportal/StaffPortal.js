@@ -40,7 +40,7 @@ function StaffPortal() {
           {selectedView === 'cate' && <h1 className='flex w-full'><Category /></h1>}
           {selectedView === 'inv' && <h1 className='flex w-full'><Inventory /></h1>}
           {selectedView === "ca" && <h1 className='w-full rounded-lg overflow-hidden '><CreateAccount /></h1>}
-          {selectedView === "dash" && <h1 className='w-full h-full rounded-lg overflow-hidden '><DashboardStaff /></h1>}
+          {selectedView === "dash" && <h1 className='w-full h-full rounded-lg  '><DashboardStaff /></h1>}
           
           
         </div>

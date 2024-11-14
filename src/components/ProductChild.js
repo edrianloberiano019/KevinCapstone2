@@ -151,7 +151,7 @@ function ProductChild() {
     const handleRemoveVariant = (index) => setVariants(variants.filter((_, i) => i !== index));
 
     return (
-        <div className='bg-[#185519] w-full p-5 rounded-xl  bg-opacity-80  backdrop-blur-[2px] drop-shadow-md '>
+        <div className='bg-[#185519] w-full p-5 rounded-xl  bg-opacity-80 backdrop-blur-sm drop-shadow-md '>
             <div>
                 <div className="grid-cols-1 grid lg:flex  w-full justify-between ">
                     <div className='flex items-center '>

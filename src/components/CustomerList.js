@@ -99,10 +99,11 @@ function CustomerList() {
   };
 
   return (
+    <div className='flex justify-center content-center items-center w-full'>
     <div className='flex justify-start content-start m-5 w-[600px] items-start text-left bg-[#185519]  bg-opacity-80 backdrop-blur-[2px] drop-shadow-md px-6 py-10 rounded-xl'>
       <form onSubmit={handleSubmit}>
         <div className='xl:flex grid grid-cols-1 justify-between items-center'>
-          <div className='text-left text-white text-2xl uppercase w-full'>Customer Form</div>
+          <div className='text-left text-white text-2xl uppercase '>Customer Form</div>
           <div className='flex bg-white rounded-md mt-3 xl:mt-0'>
             <input
               className='text-2xl px-3 w-full py-2 rounded-md'
@@ -180,6 +181,7 @@ function CustomerList() {
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 }

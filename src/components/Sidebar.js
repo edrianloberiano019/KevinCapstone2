@@ -28,7 +28,7 @@ function Sidebar({ setSelectedView }) {
         <div className='w-[350px] bg-[#347928] h-full justify-center items-center content-center'>
             <div className="">
                 <button onClick={() => handleItemClick('dash')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
-                ${selectedItem === 'sales' ? 'bg-[#2d6823]' : ''}`}>
+                ${selectedItem === 'dash' ? 'bg-[#2d6823]' : ''}`}>
                     <div className='flex '>
                         <div className="relative flex items-center content-center justify-center ml-1 group">
                             <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
@@ -55,7 +55,7 @@ function Sidebar({ setSelectedView }) {
 
                 </button>
                 <button onClick={() => handleItemClick('sale')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
-                    ${selectedItem === 'sales' ? 'bg-[#2d6823]' : ''}`}>
+                    ${selectedItem === 'sale' ? 'bg-[#2d6823]' : ''}`}>
                     <div className='flex '>
                         <div className="relative flex items-center content-center justify-center ml-1 group">
                             <div className='flex justify-center content-center items-center align-middle px-2 text-white' >

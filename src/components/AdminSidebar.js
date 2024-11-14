@@ -57,7 +57,7 @@ function AdminSidebar({setSelectedView}) {
                     </button>
 
                     <button onClick={() => handleItemClick('sale')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
-                        ${selectedItem === 'sales' ? 'bg-[#2d6823]' : ''}`}>
+                        ${selectedItem === 'sale' ? 'bg-[#2d6823]' : ''}`}>
                         <div className='flex '>
                             <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
@@ -79,7 +79,7 @@ function AdminSidebar({setSelectedView}) {
                     </button>
 
                     <button onClick={() => handleItemClick('cate')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
-                        ${selectedItem === 'category' ? 'bg-[#2d6823]' : ''}`}>
+                        ${selectedItem === 'cate' ? 'bg-[#2d6823]' : ''}`}>
                         <div className='flex '>
                             <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
@@ -281,7 +281,7 @@ function AdminSidebar({setSelectedView}) {
 
 
                     <button onClick={() => handleItemClick('ca')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
-                        ${selectedItem === 'users' ? 'bg-[#2d6823]' : ''}`}>
+                        ${selectedItem === 'ca' ? 'bg-[#2d6823]' : ''}`}>
                         <div className='flex '>
                             <div className='flex justify-center content-center items-center align-middle px-2 text-white' >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">

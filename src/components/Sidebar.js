@@ -1,5 +1,6 @@
 import { useState } from "react";
 import React from 'react';
+import logo from '../images/LOGO2.jpg'
 
 function Sidebar({ setSelectedView }) {
     const [selectedItem, setSelectedItem] = useState('dashboard');
@@ -25,8 +26,13 @@ function Sidebar({ setSelectedView }) {
 
     return (
 
-        <div className='w-[350px] bg-[#347928] h-full justify-center items-center content-center'>
+        <div className='w-[350px] bg-[#347928] h-full justify-center pt-10'>
             <div className="">
+                <div className='w-full flex justify-center items-center mb-10 '>
+                    <img className='w-[250px] drop-shadow-xl' src={logo} alt="logo" />
+
+                </div>
+
                 <button onClick={() => handleItemClick('dash')} className={`flex hover:pl-16 text-left w-full  hover:bg-[#2d6823] pl-12 py-3 transition-all duration-200
                 ${selectedItem === 'dash' ? 'bg-[#2d6823]' : ''}`}>
                     <div className='flex '>

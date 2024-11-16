@@ -13,53 +13,94 @@ function Dashboard({ setSelectedView }) {
   const [totalStock, setTotalStock] = useState(0); 
   const [totalStock2, setTotalStock2] = useState(0); 
 
+  // Define fetchCount function
   const fetchCount = async (collectionName, setter) => {
     try {
       const collectionRef = collection(db, collectionName);
       const snapshot = await getDocs(collectionRef);
-      setter(snapshot.size);
+      setter(snapshot.size); // Set the count of documents
     } catch (error) {
       toast.error(`Error fetching ${collectionName} count: ${error.message}`);
     }
   };
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      setLoading(true);
+      await Promise.all([
+        fetchCount('customerusers', setCustomerCount),
+        fetchCount('supplier', setSupplierCount),
+        fetchCount('products', setProductCount)
+      ]);
+      fetchSalesData();
+      fetchTotalStock(); 
+      fetchTotalStock2(); 
+    };
+    fetchCounts();
+  }, []);
 
   const fetchSalesData = async () => {
     try {
       setLoading(true);
       const receivedCollection = collection(db, 'received');
       const receivedSnapshot = await getDocs(receivedCollection);
-      const sales = receivedSnapshot.docs.map(doc => doc.data());
-
+  
+      // Initialize an object to store sales by month (YYYY-MM)
       const salesByMonth = {};
       const months = [
         '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06',
         '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12'
       ];
-
+  
+      // Initialize sales for all 12 months to 0
       months.forEach(month => {
         salesByMonth[month] = 0;
       });
-
-      sales.forEach(sale => {
-        const date = sale.date;
-        const monthYear = `${date.substring(0, 7)}`;
-        if (salesByMonth[monthYear] !== undefined) {
-          salesByMonth[monthYear] += 1;
+  
+      // Iterate over each document in the "received" collection
+      receivedSnapshot.docs.forEach(doc => {
+        const saleData = doc.data();
+        console.log("Sale Data:", saleData);  // Debug: Inspect the sale data
+  
+        const date = saleData.date;  // Assuming 'date' field is in 'YYYY-MM-DD' format
+        if (date) {
+          // Extract YYYY-MM from the date (e.g., '2024-01' from '2024-01-14')
+          const monthYear = date.substring(0, 7);  // Get 'YYYY-MM' (first 7 characters)
+  
+          // Increment the sales count for the corresponding month
+          if (salesByMonth[monthYear] !== undefined) {
+            salesByMonth[monthYear] += 1;
+          }
         }
       });
-
+  
+      // Log the sales count by month to verify
+      console.log("Sales by Month:", salesByMonth);
+  
+      // Convert the salesByMonth object to an array for charting
       const chartData = months.map(month => ({
-        month,
-        sales: salesByMonth[month],
+        month: month,
+        sales: salesByMonth[month],  // Get sales for each month
       }));
-
+  
+      // Log the chart data to verify
+      console.log("Chart Data for the Graph:", chartData);
+  
+      // Set the aggregated sales data
       setSalesData(chartData);
+  
       setLoading(false);
     } catch (error) {
       console.error("Error fetching sales data:", error);
       setLoading(false);
     }
   };
+  
+  
+  
+  
+  
+  
 
   const fetchTotalStock = async () => {
     try {
@@ -95,7 +136,7 @@ function Dashboard({ setSelectedView }) {
         if (productData.variants && Array.isArray(productData.variants)) {
           productData.variants.forEach(variant => {
             if (variant.quantity) {
-              total += Number(variant.quantity); // Ensure quantity is treated as a number
+              total += Number(variant.quantity); 
             }
           });
         }
@@ -107,21 +148,6 @@ function Dashboard({ setSelectedView }) {
     }
   };
   
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      setLoading(true);
-      await Promise.all([
-        fetchCount('customerusers', setCustomerCount),
-        fetchCount('supplier', setSupplierCount),
-        fetchCount('products', setProductCount)
-      ]);
-      fetchSalesData();
-      fetchTotalStock(); 
-      fetchTotalStock2(); 
-    };
-    fetchCounts();
-  }, []);
 
   const totalUsers = customerCount + supplierCount;
 

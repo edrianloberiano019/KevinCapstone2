@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAFnC68uYlpYlcRG41FScws04QGFMDLi5A",
-    authDomain: "kevinscapstonewebsite.firebaseapp.com",
-    projectId: "kevinscapstonewebsite",
-    storageBucket: "kevinscapstonewebsite.firebasestorage.app",
-    messagingSenderId: "1052896952102",
-    appId: "1:1052896952102:web:0b5bfdd746513a378e8be7",
-    measurementId: "G-JNYRC1MQ2W"
+    apiKey: "AIzaSyA30EbBgxMYXqc98sCzn37F3U-63fOBmaU",
+    authDomain: "kevincapstonewebsite2.firebaseapp.com",
+    projectId: "kevincapstonewebsite2",
+    storageBucket: "kevincapstonewebsite2.firebasestorage.app",
+    messagingSenderId: "700129069157",
+    appId: "1:700129069157:web:61c537620e21a3b7a95e8c",
+    measurementId: "G-4L2GD8V17N"
 };
 
 const app = initializeApp(firebaseConfig);

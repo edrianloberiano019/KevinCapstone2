@@ -20,18 +20,20 @@ function Category() {
         try {
             const q = query(collection(db, 'categories'));
             const querySnapshot = await getDocs(q);
+            console.log('Fetched categories:', querySnapshot.docs); // Check the response
             const fetchedCategories = querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
             setCategories(fetchedCategories);
-            setLoading3(false);
         } catch (error) {
             console.error('Error fetching categories:', error);
             toast.error('Error fetching categories');
+        } finally {
             setLoading3(false);
         }
     };
+    
 
     useEffect(() => {
         fetchCategories();
@@ -125,9 +127,14 @@ function Category() {
         }
     };
 
-    const filteredCategories = categories.filter(category =>
-        category.categoryName && searchTermInList && category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase())
+    const filteredCategories = categories.filter(category => 
+        searchTermInList ? 
+        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) : true
     );
+   
+    useEffect(() => {
+        fetchCategories();
+    }, [categories]); // Refetch when categories state changes
     
 
     return (

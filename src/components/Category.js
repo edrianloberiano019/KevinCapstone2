@@ -126,8 +126,9 @@ function Category() {
     };
 
     const filteredCategories = categories.filter(category =>
-        category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase()) 
+        category.categoryName && searchTermInList && category.categoryName.toLowerCase().includes(searchTermInList.toLowerCase())
     );
+    
 
     return (
         <div className="w-full grid grid-cols-1 xl:flex mr-5 p-5 rounded-xl gap-5 justify-center items-start">

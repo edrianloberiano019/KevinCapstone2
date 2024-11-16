@@ -12,9 +12,10 @@ import Require from '../images/LOGO2.jpg';
 function Homepage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false); 
-    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isChecked, setIsChecked] = useState(false); // Track checkbox state
+    const navigate = useNavigate();
 
     const appStyle = {
         backgroundImage: `url(${backgroundImage})`,
@@ -35,6 +36,13 @@ function Homepage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!isChecked) { // If checkbox is not checked, show an error and return
+            toast.error("You must agree to the terms and conditions to log in.", {
+                position: "top-center"
+            });
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -62,6 +70,11 @@ function Homepage() {
         }
     };
 
+    const terms = () => {
+
+        navigate('/TermsandCondition')
+    }
+
     return (
         <div>
             <div className='cont w-full h-screen' style={appStyle}>
@@ -72,7 +85,6 @@ function Homepage() {
                                 <form onSubmit={handleLogin}>
                                     <div className='flex justify-center'>
                                         <img className='my-8 rounded-lg drop-shadow-lg w-[200px]' src={Require} alt="Logo" />
-                                    
                                     </div>
                                     <div className='flex mb-2 rounded-md overflow-hidden'>
                                         <input
@@ -87,7 +99,7 @@ function Homepage() {
                                     <div className='flex mb-2 rounded-md overflow-hidden bg-white'>
                                         <input
                                             className='pl-5 focus:outline-none py-3 w-full text-black text-xl'
-                                            type={showPassword ? 'text' : 'password'} 
+                                            type={showPassword ? 'text' : 'password'}
                                             placeholder='Password'
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
@@ -99,18 +111,16 @@ function Homepage() {
                                             className='px-3 text-gray-500'
                                         >
                                             {showPassword ? (
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                                     <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-                                                    <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd" />
+                                                    <path fillRule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clipRule="evenodd" />
                                                 </svg>
-
                                             ) : (
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
                                                     <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577a11.217 11.217 0 0 1 4.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z" />
                                                     <path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z" />
                                                     <path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z" />
                                                 </svg>
-
                                             )}
                                         </button>
                                     </div>
@@ -121,8 +131,18 @@ function Homepage() {
                                         {loading ? <LoadingButtons /> : 'Log In'}
                                     </button>
                                 </form>
-                                <div className='flex justify-end'>
-                                    <a href='/' className='text-sm mt-2 mb-8'>Forgot password?</a>
+                                <div className='flex justify-start py-3 items-start mb-5'>
+                                    <input
+                                        className='w-7 mr-1 mt-1'
+                                        type='checkbox'
+                                        checked={isChecked}
+                                        onChange={() => setIsChecked(!isChecked)} 
+                                    />
+                                    <div className='text-sm text-left'>
+                                        By ticking, you are confirming that you have read, understood and agree to QVENT{' '}
+                                        <button onClick={terms} className='text-blue-400 hover:underline'>terms and conditions</button> and{' '}
+                                        <button className='text-blue-400 hover:underline'>privacy policy</button>.
+                                    </div>
                                 </div>
                             </div>
                         </div>

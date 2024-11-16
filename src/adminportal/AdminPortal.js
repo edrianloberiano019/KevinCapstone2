@@ -15,6 +15,7 @@ import Sales from '../components/Sales';
 import Category from '../components/Category';
 import DashboardStaff from '../components/DashboardStaff'
 import AnnouncementImage from '../images/bgKev.png'
+import ProductInventory from '../components/ProductInventory';
 
 function AdminPortal() {
   const [selectedView, setSelectedView] = useState('dashboard');
@@ -50,6 +51,7 @@ function AdminPortal() {
           {selectedView === 'cate' && <h1 className='flex w-full'><Category /></h1>}
           {selectedView === 'inv' && <h1 className='flex w-full'><Inventory /></h1>}
           {selectedView === "dash" && <h1 className='w-full h-full rounded-lg overflow-hidden '><DashboardStaff /></h1>}
+          {selectedView === "invent" && <h1 className='w-full h-full rounded-lg overflow-hidden p-5'><ProductInventory /></h1>}
         </div>
 
       </div>

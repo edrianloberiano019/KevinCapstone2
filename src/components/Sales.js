@@ -131,7 +131,7 @@ function Sales() {
     const handleVariantChange = (variantName) => {
         const selectedVariant = variants.find(variant => variant.name === variantName);
         setSelectedVariant(selectedVariant);
-        setSelectedVariantQuantity(selectedVariant ? selectedVariant.quantity : 0);
+        setSelectedVariantQuantity(selectedVariant ? selectedVariant.outStock : 0);
     };
 
     const handleAddToCart = () => {
@@ -187,15 +187,15 @@ function Sales() {
     const handleCompleteTransaction = async () => {
         const totalAmount = cart.reduce((total, item) => total + item.totalAmount, 0);
         const tenderedAmount = parseFloat(amountTendered);
-
+    
         if (isNaN(tenderedAmount) || tenderedAmount < totalAmount) {
             toast.error("Amount tendered is less than the total amount.");
             return;
         }
-
+    
         const currentDate = new Date();
         const formattedDate = format(currentDate, 'yyyy-MM-dd');
-
+    
         const transactionData = {
             customerName,
             date: formattedDate,
@@ -207,27 +207,27 @@ function Sales() {
                 totalAmount: item.totalAmount,
             }))
         };
-
+    
         try {
             setLoading(true);
-
+    
             const transactionRef = doc(db, 'received', customerName);
             await setDoc(transactionRef, transactionData, { merge: true });
-
+    
             for (let item of cart) {
                 const selectedProduct = categories.find(product => product.name === item.productName);
                 const selectedVariant = selectedProduct.variants.find(variant => variant.name === item.variantName);
-
+    
                 if (selectedVariant) {
-                    const updatedQuantity = selectedVariant.quantity - item.quantity;
+                    const updatedOutStock = Math.max((selectedVariant.outStock || 0) - item.quantity, 0);
+    
                     const productRef = doc(db, 'products', selectedProduct.id);
-
                     await setDoc(
                         productRef,
                         {
                             variants: selectedProduct.variants.map(variant =>
                                 variant.name === selectedVariant.name
-                                    ? { ...variant, quantity: updatedQuantity }
+                                    ? { ...variant, outStock: updatedOutStock }
                                     : variant
                             ),
                         },
@@ -235,7 +235,11 @@ function Sales() {
                     );
                 }
             }
-
+    
+            const updatedCategories = await getDocs(collection(db, 'products'));
+            const categoriesData = updatedCategories.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setCategories(categoriesData);
+    
             setTransactionData({
                 customerName,
                 date: formattedDate,
@@ -243,10 +247,10 @@ function Sales() {
                 totalAmount,
                 change: tenderedAmount - totalAmount
             });
-
+    
             setShowReceipt(true);
             setCart([]);
-            toast.success('The transaction was success!');
+            toast.success('The transaction was successful!');
             setShowPaymentModal(false);
             setLoading(false);
         } catch (error) {
@@ -254,6 +258,10 @@ function Sales() {
             setLoading(false);
         }
     };
+    
+    
+    
+    
 
 
 
@@ -306,8 +314,9 @@ function Sales() {
                 </select>
 
                 <div className='w-full flex items-center'>
-                    <div className='px-3 rounded-md bg-gray-200 py-2'>Available Quantity: {selectedVariantQuantity}</div>
+                    <div className='px-3 rounded-md bg-gray-200 py-2'>OutStock: {selectedVariantQuantity}</div>
                 </div>
+
 
                 <div className='w-full lg:w-auto flex ml-3 items-center'>
                     <input

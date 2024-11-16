@@ -10,34 +10,16 @@ function Dashboard({ setSelectedView }) {
   const [productCount, setProductCount] = useState(0);
   const [salesData, setSalesData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalStock, setTotalStock] = useState(0); 
+  const [totalStock2, setTotalStock2] = useState(0); 
 
-  const fetchCustomerCount = async () => {
+  const fetchCount = async (collectionName, setter) => {
     try {
-      const customerCollection = collection(db, 'customerusers');
-      const customerSnapshot = await getDocs(customerCollection);
-      setCustomerCount(customerSnapshot.size);
+      const collectionRef = collection(db, collectionName);
+      const snapshot = await getDocs(collectionRef);
+      setter(snapshot.size);
     } catch (error) {
-      toast.error("Error fetching customer count: ", error);
-    }
-  };
-
-  const fetchProductCount = async () => {
-    try {
-      const productCollection = collection(db, 'products');
-      const productSnapshot = await getDocs(productCollection);
-      setProductCount(productSnapshot.size);
-    } catch (error) {
-      toast.error("Error fetching product count: ", error);
-    }
-  };
-
-  const fetchSupplierCount = async () => {
-    try {
-      const supplierCollection = collection(db, 'supplier');
-      const supplierSnapshot = await getDocs(supplierCollection);
-      setSupplierCount(supplierSnapshot.size);
-    } catch (error) {
-      toast.error("Error fetching supplier count: ", error);
+      toast.error(`Error fetching ${collectionName} count: ${error.message}`);
     }
   };
 
@@ -79,11 +61,64 @@ function Dashboard({ setSelectedView }) {
     }
   };
 
+  const fetchTotalStock = async () => {
+    try {
+      const productCollection = collection(db, 'products');
+      const productSnapshot = await getDocs(productCollection);
+      let total = 0;
+  
+      productSnapshot.forEach((doc) => {
+        const productData = doc.data();
+        if (productData.variants && Array.isArray(productData.variants)) {
+          productData.variants.forEach(variant => {
+            if (variant.outStock) {
+              total += variant.outStock;
+            }
+          });
+        }
+      });
+  
+      setTotalStock(total);
+    } catch (error) {
+      toast.error("Error fetching product stock: ", error);
+    }
+  };
+
+  const fetchTotalStock2 = async () => {
+    try {
+      const productCollection = collection(db, 'products');
+      const productSnapshot = await getDocs(productCollection);
+      let total = 0;
+  
+      productSnapshot.forEach((doc) => {
+        const productData = doc.data();
+        if (productData.variants && Array.isArray(productData.variants)) {
+          productData.variants.forEach(variant => {
+            if (variant.quantity) {
+              total += Number(variant.quantity); // Ensure quantity is treated as a number
+            }
+          });
+        }
+      });
+  
+      setTotalStock2(total);
+    } catch (error) {
+      toast.error("Error fetching product stock: ", error);
+    }
+  };
+  
+
   useEffect(() => {
     const fetchCounts = async () => {
       setLoading(true);
-      await Promise.all([fetchCustomerCount(), fetchSupplierCount(), fetchProductCount()]);
+      await Promise.all([
+        fetchCount('customerusers', setCustomerCount),
+        fetchCount('supplier', setSupplierCount),
+        fetchCount('products', setProductCount)
+      ]);
       fetchSalesData();
+      fetchTotalStock(); 
+      fetchTotalStock2(); 
     };
     fetchCounts();
   }, []);
@@ -125,7 +160,7 @@ function Dashboard({ setSelectedView }) {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-5">
+        <div className="grid grid-cols-4 gap-x-5">
           <div className="flex hover:bg-pink-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-pink-800 rounded-xl drop-shadow-md transition-all hover:scale-105">
             <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
               <div className="text-sm uppercase">Products</div>
@@ -146,11 +181,29 @@ function Dashboard({ setSelectedView }) {
               )}
             </div>
           </div>
+          <div className="flex hover:bg-yellow-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-yellow-800 rounded-xl drop-shadow-md transition-all hover:scale-105">
+            <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
+              <div className="text-sm uppercase">Total product out-stock</div>
+              {loading ? (
+                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
+              ) : (
+                <div className="text-2xl sm:text-3xl">{totalStock}</div>
+              )}
+            </div>
+          </div>
+          <div className="flex hover:bg-yellow-900 text-white backdrop-blur-md bg-opacity-70 font-bold bg-yellow-800 rounded-xl drop-shadow-md transition-all hover:scale-105">
+            <div className="pr-6 sm:pr-10 pl-4 py-6 text-left">
+              <div className="text-sm uppercase">Total product in-stock</div>
+              {loading ? (
+                <div className="w-5 h-5 border-4 border-green-700 border-solid rounded-full border-t-transparent animate-spin mt-4"></div>
+              ) : (
+                <div className="text-2xl sm:text-3xl">{totalStock2}</div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-      <div className="mt-5 mb-5 backdrop-blur-md bg-opacity-80 px-5 rounded-xl drop-shadow-md py-2 text-black bg-white">
-        <SalesAnalytics salesData={salesData} />
-      </div>
+      <SalesAnalytics salesData={salesData} />
     </div>
   );
 }

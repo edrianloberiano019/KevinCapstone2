@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, addDoc, getDocs, query, where, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import { toast } from "react-toastify";
 
@@ -21,7 +21,7 @@ function ProductChild() {
         const fetchData = async () => {
             try {
                 const categoriesSnapshot = await getDocs(collection(db, 'categories'));
-                const customerSnapshot = await getDocs(collection(db, 'customerusers'));
+                const customerSnapshot = await getDocs(collection(db, 'supplier'));
 
                 setCategories(categoriesSnapshot.docs.map(doc => doc.data().categoryName));
                 setCustomer(customerSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -47,23 +47,23 @@ function ProductChild() {
 
     const handleSearch = async () => {
         if (!searchQuery) return toast.error('Enter a product name to search.', { position: "top-center" });
-    
+
         setLoading(true);
         const q = query(collection(db, 'products'), where('name', '==', searchQuery));
         const querySnapshot = await getDocs(q);
         const product = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0];
-    
+
         if (product) {
             setProductName(product.name);
             setVariants(product.variants || [{ name: '', quantity: '', price: '' }]);
             setExpirationDate(product.expirationDate || '');
             setEditProductId(product.id);
             setSelectedCategory(product.category || '');
-            
-            const supplier = customer.find(c => c.name === product.supplier); 
+
+            const supplier = customer.find(c => c.name === product.supplier);
             if (supplier) {
-                setSelectedCustomer(supplier.id); 
-                setCustomerName(supplier.name); 
+                setSelectedCustomer(supplier.id);
+                setCustomerName(supplier.name);
                 setIsCustomerFound(true);
             } else {
                 setSelectedCustomer('');
@@ -77,26 +77,25 @@ function ProductChild() {
             setExpirationDate('');
             setEditProductId(null);
             setSelectedCategory('');
-            setSelectedCustomer(''); 
+            setSelectedCustomer('');
             setCustomerName('');
             setIsCustomerFound(false);
         }
         setLoading(false);
     };
-    
 
     const handleSave = async () => {
         if (!selectedCustomer) return toast.warning('Please select a supplier name.', { position: "top-center" });
-        if (!productName || !expirationDate) return toast.warning('Please fill all fields.', { position: "top-center" });
+        if (!productName || (selectedCategory !== 'School Supplies' && !expirationDate)) return toast.warning('Please fill all fields.', { position: "top-center" });
         if (!selectedCategory) return toast.warning('Please select a category.', { position: "top-center" });
-    
+
         const isValidVariants = variants.every(variant => variant.name && variant.quantity > 0 && variant.price >= 0);
         if (!isValidVariants) return toast.warning('All variants must have valid name, quantity, and price.', { position: "top-center" });
-    
+
         setLoading(true);
         try {
-            const supplierName = customer.find(c => c.id === selectedCustomer)?.name; 
-    
+            const supplierName = customer.find(c => c.id === selectedCustomer)?.name;
+
             if (editProductId) {
                 await updateDoc(doc(db, 'products', editProductId), {
                     name: productName,
@@ -109,7 +108,7 @@ function ProductChild() {
             } else {
                 const q = query(collection(db, 'products'), where('name', '==', productName));
                 if (!(await getDocs(q)).empty) return toast.error("Product name already exists.");
-    
+
                 await addDoc(collection(db, 'products'), {
                     name: productName,
                     variants,
@@ -119,7 +118,7 @@ function ProductChild() {
                 });
                 toast.success("Product added successfully!");
             }
-    
+
             setProductName('');
             setVariants([{ name: '', quantity: '', price: '' }]);
             setExpirationDate('');
@@ -134,11 +133,14 @@ function ProductChild() {
             setLoading(false);
         }
     };
-    
-    
 
     const handleVariantChange = (index, field, value) => {
         const updatedVariants = [...variants];
+
+        if (editProductId && field === 'quantity') {
+            return toast.error('You cannot modify the quantity for this product.');
+        }
+
         if (field === 'quantity' && (isNaN(value) || value < 1)) return toast.error('Quantity must be a positive number.');
         if (field === 'price' && (isNaN(value) || value < 0)) return toast.error('Price must be a positive number.');
 
@@ -150,13 +152,38 @@ function ProductChild() {
 
     const handleRemoveVariant = (index) => setVariants(variants.filter((_, i) => i !== index));
 
+    const handleDelete = async () => {
+        if (!editProductId) return toast.error("No product selected to delete.");
+
+        const confirmDelete = window.confirm("Are you sure you want to delete this product?");
+        if (confirmDelete) {
+            setLoading(true);
+            try {
+                await deleteDoc(doc(db, 'products', editProductId));
+                toast.success("Product deleted successfully!");
+                setProductName('');
+                setVariants([{ name: '', quantity: '', price: '' }]);
+                setExpirationDate('');
+                setEditProductId(null);
+                setSelectedCategory('');
+                setSelectedCustomer('');
+                setCustomerName('');
+                setIsCustomerFound(false);
+            } catch (error) {
+                console.error("Error deleting product: ", error);
+                toast.error("Failed to delete product.");
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
     return (
         <div className='bg-[#185519] w-full p-5 rounded-xl  bg-opacity-80 backdrop-blur-sm drop-shadow-md '>
             <div>
                 <div className="grid-cols-1 grid lg:flex  w-full justify-between ">
                     <div className='flex items-center '>
                         <h1 className='w-full text-left uppercase text-white' >Changing or adding product</h1>
-
                     </div>
                     <div className='flex  mt-4 xl:mt-0'>
                         <input
@@ -169,10 +196,9 @@ function ProductChild() {
                         <button className="px-3 pr-4 bg-gray-200 py-2  rounded-r-md" onClick={handleSearch}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-8">
                                 <path d="M8.25 10.875a2.625 2.625 0 1 1 5.25 0 2.625 2.625 0 0 1-5.25 0Z" />
-                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 4.5a4.125 4.125 0 1 0 2.338 7.524l2.007 2.006a.75.75 0 1 0 1.06-1.06l-2.006-2.007a4.125 4.125 0 0 0-3.399-6.463Z" clipRule="evenodd" />
+                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.125 3.75a1.125 1.125 0 1 1 2.25 0v5.25a1.125 1.125 0 1 1-2.25 0V6Z" clipRule="evenodd" />
                             </svg>
                         </button>
-                    
                     </div>
                 </div>
                 <div className='hidden'>{customerFound}{customerName}
@@ -208,7 +234,7 @@ function ProductChild() {
                                 className="form-control py-2 w-full px-3 text-black pr-2 rounded-md text-lg bg-gray-200"
                                 value={selectedCategory}
                                 onChange={(e) => setSelectedCategory(e.target.value)}
-                                disabled={!selectedCustomer} 
+                                disabled={!selectedCustomer}
                                 required
                             >
                                 <option value="" disabled>Select Category</option>
@@ -245,8 +271,9 @@ function ProductChild() {
                                 type="number"
                                 value={variant.quantity}
                                 onChange={(e) => handleVariantChange(index, 'quantity', e.target.value)}
+                                disabled={editProductId}
                             />
-                            
+
                             <div className='flex bg-gray-200 rounded-md '>
                                 <div className='flex content-center items-center pl-2'>
                                     <div className='text-lg text-center'>PHP</div>
@@ -272,6 +299,16 @@ function ProductChild() {
                         </div>
                     ))}
                     <div className="flex gap-4 justify-end mt-5 text-lg">
+
+                        {editProductId && (
+                            <button
+                                className="bg-red-600 px-4 py-2 rounded-md font-bold drop-shadow-md text-white hover:bg-red-800"
+                                onClick={handleDelete}
+                                disabled={loading}
+                            >
+                                {loading ? 'Deleting...' : 'Delete'}
+                            </button>
+                        )}
                         <button
                             className={`bg-green-700 px-4 py-2 rounded-md font-bold drop-shadow-md text-white ${loading ? 'opacity-50 cursor-not-allowed' : 'bg-blue-600 '}`}
                             onClick={handleSave}
@@ -279,8 +316,8 @@ function ProductChild() {
                         >
                             {loading ? 'Saving...' : (editProductId ? 'Update' : 'Save')}
                         </button>
-                
                     </div>
+
                 </div>
             </div>
         </div>

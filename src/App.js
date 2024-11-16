@@ -6,6 +6,7 @@ import StaffPortal from './staffportal/StaffPortal';
 import CreateAccount from './components/CreateAccount';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
+import Terms from './components/Terms';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/admin" element={<AdminPortal />} />
           <Route path="/staff" element={<StaffPortal />} />
           <Route path="/CreateAccount" element={<CreateAccount />} />
+          <Route path="/TermsandCondition" element={<Terms />} />
         </Routes>
       </div>
     </Router>

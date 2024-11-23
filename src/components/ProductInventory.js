@@ -180,7 +180,7 @@ function ProductInventory() {
                                         value={variant.outStock || ''}  
                                         onChange={(e) => handleOutStockChange(index, e.target.value)}  
                                     />
-                                    <div className='hidden'>{outStockValues}</div>
+                                    <div className='hidden'>{JSON.stringify(outStockValues)}</div>
                                 </div>
                             </div>
                         ))}

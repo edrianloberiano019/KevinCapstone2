@@ -178,6 +178,10 @@ function ProductChild() {
         }
     };
 
+    const nextWeekDate = new Date();
+    nextWeekDate.setDate(nextWeekDate.getDate() + (7 - nextWeekDate.getDay())); 
+    const nextWeekDateString = nextWeekDate.toISOString().split('T')[0]
+
     return (
         <div className='bg-[#185519] w-full p-5 rounded-xl  bg-opacity-80 backdrop-blur-sm drop-shadow-md '>
             <div>
@@ -246,13 +250,13 @@ function ProductChild() {
                             </select>
                         </div>
                         <div>
-                            <div className='text-base text-left pl-3 text-white'>Expiration date</div>
+                            <label className="text-base text-left text-white">Expiration Date</label>
                             <input
-                                className='text-lg bg-gray-200 px-3 py-2 w-full  rounded-md'
-                                type='date'
+                                type="date"
+                                className="text-lg bg-gray-200 px-3 py-2 w-full  rounded-md"
                                 value={expirationDate}
+                                min={nextWeekDateString}  
                                 onChange={(e) => setExpirationDate(e.target.value)}
-                                required
                             />
                         </div>
                     </div>

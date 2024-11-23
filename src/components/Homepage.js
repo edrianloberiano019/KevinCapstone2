@@ -14,7 +14,7 @@ function Homepage() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [isChecked, setIsChecked] = useState(false); // Track checkbox state
+    const [isChecked, setIsChecked] = useState(false); 
     const navigate = useNavigate();
 
     const appStyle = {
@@ -36,7 +36,7 @@ function Homepage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        if (!isChecked) { // If checkbox is not checked, show an error and return
+        if (!isChecked) { 
             toast.error("You must agree to the terms and conditions to log in.", {
                 position: "top-center"
             });
@@ -139,7 +139,7 @@ function Homepage() {
                                         onChange={() => setIsChecked(!isChecked)} 
                                     />
                                     <div className='text-sm text-left'>
-                                        By ticking, you are confirming that you have read, understood and agree to QVENT{' '}
+                                        By clicking, you are confirming that you have read, understood and agree to QVENT{' '}
                                         <button onClick={terms} className='text-blue-400 hover:underline'>terms and conditions</button> and{' '}
                                         <button className='text-blue-400 hover:underline'>privacy policy</button>.
                                     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { toast } from 'react-toastify';
-import SalesAnalytics from './SalesAnalytics';
+import BarGraphDashboard from './BarGraphDashboard';
 
 function Dashboard({ setSelectedView }) {
   const [customerCount, setCustomerCount] = useState(0);
@@ -13,12 +13,11 @@ function Dashboard({ setSelectedView }) {
   const [totalStock, setTotalStock] = useState(0); 
   const [totalStock2, setTotalStock2] = useState(0); 
 
-  // Define fetchCount function
   const fetchCount = async (collectionName, setter) => {
     try {
       const collectionRef = collection(db, collectionName);
       const snapshot = await getDocs(collectionRef);
-      setter(snapshot.size); // Set the count of documents
+      setter(snapshot.size);
     } catch (error) {
       toast.error(`Error fetching ${collectionName} count: ${error.message}`);
     }
@@ -45,45 +44,37 @@ function Dashboard({ setSelectedView }) {
       const receivedCollection = collection(db, 'received');
       const receivedSnapshot = await getDocs(receivedCollection);
   
-      // Initialize an object to store sales by month (YYYY-MM)
       const salesByMonth = {};
       const months = [
         '2024-01', '2024-02', '2024-03', '2024-04', '2024-05', '2024-06',
         '2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12'
       ];
   
-      // Initialize sales for all 12 months to 0
       months.forEach(month => {
         salesByMonth[month] = 0;
       });
   
-      // Iterate over each document in the "received" collection
       receivedSnapshot.docs.forEach(doc => {
         const saleData = doc.data();
-        console.log("Sale Data:", saleData);  // Debug: Inspect the sale data
+        console.log("Sale Data:", saleData);  
   
-        const date = saleData.date;  // Assuming 'date' field is in 'YYYY-MM-DD' format
+        const date = saleData.date; 
         if (date) {
-          // Extract YYYY-MM from the date (e.g., '2024-01' from '2024-01-14')
-          const monthYear = date.substring(0, 7);  // Get 'YYYY-MM' (first 7 characters)
+          const monthYear = date.substring(0, 7); 
   
-          // Increment the sales count for the corresponding month
           if (salesByMonth[monthYear] !== undefined) {
             salesByMonth[monthYear] += 1;
           }
         }
       });
   
-      // Log the sales count by month to verify
       console.log("Sales by Month:", salesByMonth);
   
-      // Convert the salesByMonth object to an array for charting
       const chartData = months.map(month => ({
         month: month,
-        sales: salesByMonth[month],  // Get sales for each month
+        sales: salesByMonth[month], 
       }));
   
-      // Log the chart data to verify
       console.log("Chart Data for the Graph:", chartData);
   
       // Set the aggregated sales data
@@ -229,7 +220,7 @@ function Dashboard({ setSelectedView }) {
           </div>
         </div>
       </div>
-      <SalesAnalytics salesData={salesData} />
+      <BarGraphDashboard />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, setDoc, doc } from "firebase/firestore";
+import { collection, getDocs, setDoc, doc, getDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import { toast } from "react-toastify";
 import { format } from 'date-fns';
@@ -184,80 +184,96 @@ function Sales() {
 
 
 
-    const handleCompleteTransaction = async () => {
-        const totalAmount = cart.reduce((total, item) => total + item.totalAmount, 0);
-        const tenderedAmount = parseFloat(amountTendered);
+const handleCompleteTransaction = async () => {
+    const totalAmount = cart.reduce((total, item) => total + item.totalAmount, 0);
+    const tenderedAmount = parseFloat(amountTendered);
+
+    if (isNaN(tenderedAmount) || tenderedAmount < totalAmount) {
+        toast.error("Amount tendered is less than the total amount.");
+        return;
+    }
+
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, 'yyyy-MM-dd');
+    const formattedTime = format(currentDate, 'hh:mm a'); 
     
-        if (isNaN(tenderedAmount) || tenderedAmount < totalAmount) {
-            toast.error("Amount tendered is less than the total amount.");
-            return;
+    const transactionData = {
+        customerName,
+        date: formattedDate,
+        time: formattedTime, 
+        items: cart.map(item => ({
+            productName: item.productName,
+            variantName: item.variantName,
+            quantity: item.quantity,
+            price: item.price,
+            totalAmount: item.totalAmount,
+        }))
+    };
+
+    try {
+        setLoading(true);
+
+        const counterDocRef = doc(db, 'transactionCounter', 'counter');
+        const counterDoc = await getDoc(counterDocRef);
+
+        let newTransactionId = 1;
+
+        if (counterDoc.exists()) {
+            newTransactionId = counterDoc.data().lastUsedId + 1; 
         }
-    
-        const currentDate = new Date();
-        const formattedDate = format(currentDate, 'yyyy-MM-dd');
-    
-        const transactionData = {
+
+        const transactionDocRef = doc(db, 'received', newTransactionId.toString());
+        await setDoc(transactionDocRef, transactionData);
+
+        await setDoc(counterDocRef, { lastUsedId: newTransactionId });
+
+        for (let item of cart) {
+            const selectedProduct = categories.find(product => product.name === item.productName);
+            const selectedVariant = selectedProduct.variants.find(variant => variant.name === item.variantName);
+
+            if (selectedVariant) {
+                const updatedOutStock = Math.max((selectedVariant.outStock || 0) - item.quantity, 0);
+
+                const productRef = doc(db, 'products', selectedProduct.id);
+                await setDoc(
+                    productRef,
+                    {
+                        variants: selectedProduct.variants.map(variant =>
+                            variant.name === selectedVariant.name
+                                ? { ...variant, outStock: updatedOutStock }
+                                : variant
+                        ),
+                    },
+                    { merge: true }
+                );
+            }
+        }
+
+        const updatedCategories = await getDocs(collection(db, 'products'));
+        const categoriesData = updatedCategories.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setCategories(categoriesData);
+
+        setTransactionData({
             customerName,
             date: formattedDate,
-            items: cart.map(item => ({
-                productName: item.productName,
-                variantName: item.variantName,
-                quantity: item.quantity,
-                price: item.price,
-                totalAmount: item.totalAmount,
-            }))
-        };
+            time: formattedTime,
+            items: cart,
+            totalAmount,
+            change: tenderedAmount - totalAmount
+        });
+
+        setShowReceipt(true);
+        setCart([]);
+        toast.success('The transaction was successful!');
+        setShowPaymentModal(false);
+        setLoading(false);
+    } catch (error) {
+        toast.error("Failed to save transaction");
+        setLoading(false);
+    }
+};
+
     
-        try {
-            setLoading(true);
-    
-            const transactionRef = doc(db, 'received', customerName);
-            await setDoc(transactionRef, transactionData, { merge: true });
-    
-            for (let item of cart) {
-                const selectedProduct = categories.find(product => product.name === item.productName);
-                const selectedVariant = selectedProduct.variants.find(variant => variant.name === item.variantName);
-    
-                if (selectedVariant) {
-                    const updatedOutStock = Math.max((selectedVariant.outStock || 0) - item.quantity, 0);
-    
-                    const productRef = doc(db, 'products', selectedProduct.id);
-                    await setDoc(
-                        productRef,
-                        {
-                            variants: selectedProduct.variants.map(variant =>
-                                variant.name === selectedVariant.name
-                                    ? { ...variant, outStock: updatedOutStock }
-                                    : variant
-                            ),
-                        },
-                        { merge: true }
-                    );
-                }
-            }
-    
-            const updatedCategories = await getDocs(collection(db, 'products'));
-            const categoriesData = updatedCategories.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            setCategories(categoriesData);
-    
-            setTransactionData({
-                customerName,
-                date: formattedDate,
-                items: cart,
-                totalAmount,
-                change: tenderedAmount - totalAmount
-            });
-    
-            setShowReceipt(true);
-            setCart([]);
-            toast.success('The transaction was successful!');
-            setShowPaymentModal(false);
-            setLoading(false);
-        } catch (error) {
-            toast.error("Failed to save transaction");
-            setLoading(false);
-        }
-    };
     
     
     

@@ -54,14 +54,21 @@ function SupplierList() {
                 </div>
                 
                 <div className='block xl:hidden'>
-                    <div className='py-10 text-center'>The product list is only available in PC view.</div>
+                    <div className='py-10 text-center'>The supplier list is only available in PC view.</div>
                 </div>
                 <div className='hidden xl:block'>
                     <div className='flex px-10 pt-2'>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 border-gray-200 pl-4 py-2'>ID</div>
                         <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Name</div>
-                        <div className='w-full text-left text-xl border-t-2 bg-gray-200 border-l-2 pl-4 py-2'>Contact</div>
-                        <div className='w-full text-left text-xl bg-gray-200 border-l-2 border-t-2 border-r-2 pl-4 py-2'>Status</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Contact</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Company</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Email</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Address Line 1</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Address Line 2</div>
+                        <div className='w-full text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>City</div>
+                        <div className='w-[50%] text-left text-xl bg-gray-200 border-t-2 border-l-2 px-2'>Pstl code</div>
+                        <div className='w-[70%] text-left text-xl bg-gray-200 border-t-2 border-l-2 pl-4 py-2'>Gender</div>
+                        <div className='w-[80%] text-left text-xl bg-gray-200 border-l-2 border-t-2 border-r-2 pl-4 py-2'>Status</div>
                     </div>
 
                     {loading ? (
@@ -74,10 +81,17 @@ function SupplierList() {
                                 <div className='border-b-2'>
                                     {filteredCustomers.map(customer => (
                                         <div className='flex' key={customer.id}>
-                                            <div className='w-full text-left text-xl border-t-2 border-l-2 border-gray-200 pl-4 py-2'>{customer.id}</div>
-                                            <div className='w-full text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.name}</div>
-                                            <div className='w-full text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.contact}</div>
-                                            <div className='w-full text-left text-xl border-l-2 border-t-2 border-r-2 pl-4 py-2'>{customer.status}</div>
+                                            <div className='w-full overflow-hidden text-left text-xl border-t-2 border-l-2 border-gray-200 pl-4 py-2'>{customer.id}</div>
+                                            <div className='w-full text-left overflow-hidden text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.name}</div>
+                                            <div className='w-full overflow-hidden text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.contact}</div>
+                                            <div className='w-full overflow-hidden text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.companyName}</div>
+                                            <div className='w-full overflow-hidden text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.email}</div>
+                                            <div className='w-full text-left overflow-hidden text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.addressLine1}</div>
+                                            <div className='w-full text-left text-xl overflow-hidden border-t-2 border-l-2 pl-4 py-2'>{customer.addressLine2}</div>
+                                            <div className='w-full text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.city}</div>
+                                            <div className='w-[50%] text-left text-xl border-t-2 border-l-2 px-2'>{customer.postalCode}</div>
+                                            <div className='w-[70%] text-left text-xl border-t-2 border-l-2 pl-4 py-2'>{customer.gender}</div>
+                                            <div className='w-[80%] text-left text-xl border-l-2 border-t-2 border-r-2 pl-4 py-2'>{customer.status}</div>
                                         </div>
                                     ))}
                                 </div>

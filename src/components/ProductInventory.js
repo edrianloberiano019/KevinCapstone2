@@ -7,8 +7,8 @@ import LoadingButtons from './LoadingButtons';
 function ProductInventory() {
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [outStockValues, setOutStockValues] = useState({});
-    const [loading, setLoading] = useState(false)
+    const [outStockValues, setOutStockValues] = useState({}); 
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -30,22 +30,60 @@ function ProductInventory() {
     const handleProductChange = (event) => {
         const productName = event.target.value;
         const product = products.find((prod) => prod.name === productName);
-        setSelectedProduct(product || null);
-        setOutStockValues({});
+    
+        if (product) {
+            const initialVariants = product.variants.map(variant => ({
+                ...variant,
+                initialQuantity: variant.quantity,  
+            }));
+            setSelectedProduct({ ...product, variants: initialVariants });
+        } else {
+            setSelectedProduct(null);
+        }
+    
+        setOutStockValues({});  
     };
+    
 
-    const handleOutStockChange = (variantId, event) => {
-        setOutStockValues(prevState => ({
-            ...prevState,
-            [variantId]: event.target.value
+    const handleOutStockChange = (index, value) => {
+        const updatedVariants = [...selectedProduct.variants]; 
+        if (value === '') {
+            updatedVariants[index].outStock = 0;
+            updatedVariants[index].quantity = updatedVariants[index].initialQuantity; 
+        } else {
+            const outStock = parseInt(value, 10);
+            
+            if (outStock < 0) {
+                return toast.error('Out stock must be a positive number.');
+            }
+    
+            const inStock = updatedVariants[index].initialQuantity; 
+            if (outStock > inStock) {
+                return toast.error('Out stock cannot be greater than in stock.');
+            }
+    
+            updatedVariants[index].outStock = outStock;
+            updatedVariants[index].quantity = inStock - outStock; 
+        }
+    
+        setSelectedProduct((prevProduct) => ({
+            ...prevProduct,
+            variants: updatedVariants,
         }));
     };
+    
+    
 
     const handleSave = async () => {
         let valid = true;
         setLoading(true);
     
-        // Fetch the current product data from Firestore
+        if (!selectedProduct) {
+            toast.error("Please select a product first!");
+            setLoading(false);
+            return;
+        }
+    
         const productRef = doc(db, 'products', selectedProduct.id);
         const productSnapshot = await getDoc(productRef);
     
@@ -55,19 +93,16 @@ function ProductInventory() {
             return;
         }
     
-        const productData = productSnapshot.data();
-    
         const updatedVariants = selectedProduct.variants.map((variant) => {
-            const outStock = parseInt(outStockValues[variant.id] || 0, 10);
+            let outStock = variant.outStock || 0;  
             const inStock = variant.quantity;
-    
-            // Check if the outStock value is valid
-            if (outStock <= 0) {
+            if (outStock < 0 || isNaN(outStock)) {
                 valid = false;
-                toast.error(`Out stock must be greater than 0 for ${variant.name}`);
+                toast.error(`Out stock must be a positive number for ${variant.name}`);
                 setLoading(false);
                 return null;
             }
+    
             if (outStock > inStock) {
                 valid = false;
                 toast.error(`Out stock cannot be greater than in stock for ${variant.name}`);
@@ -75,45 +110,31 @@ function ProductInventory() {
                 return null;
             }
     
-            // Calculate new quantity by subtracting the outStock from inStock
-            const newQuantity = inStock - outStock;
-    
-            // Get the current outStock from Firestore, or default to 0
-            const existingOutStock = productData.variants.find(v => v.id === variant.id)?.outStock || 0;
-            
-            // Add the current outStock to the existing outStock value (accumulating the outStock)
-            const updatedOutStock = existingOutStock + outStock;
+            const newOutStock = (variant.outStock || 0) + outStock; 
+            const newQuantity = inStock - newOutStock;  
     
             return {
                 ...variant,
-                quantity: newQuantity,  // Update the quantity
-                outStock: updatedOutStock,  // Add to outStock, keeping it cumulative
+                outStock: newOutStock,  
+                quantity: newQuantity,  
             };
-        });
+        }).filter(variant => variant !== null);
     
         if (valid) {
             try {
-                // Update Firestore with the new variants data
                 await updateDoc(productRef, {
-                    variants: updatedVariants,
+                    variants: updatedVariants,  
                 });
-    
                 toast.success('Out stock and quantity updated successfully!');
-                setLoading(false);
             } catch (error) {
                 console.error('Error updating product variants:', error);
                 toast.error('Failed to update product variants.');
-                setLoading(false);
             }
         }
+        setLoading(false);
     };
     
     
-    
-
-
-
-
 
     return (
         <div className='bg-[#185519] rounded-md bg-opacity-80 backdrop-blur-sm text-2xl text-white p-5 w-full'>
@@ -142,7 +163,7 @@ function ProductInventory() {
                         <div>Product Name: {selectedProduct?.name || ''}</div>
                     </div>
                     <div className='mt-5 gap-x-5'>
-                        {selectedProduct?.variants?.map((variant) => (
+                        {selectedProduct?.variants?.map((variant, index) => (
                             <div key={variant.id} className="flex gap-5 mb-5">
                                 <div className="bg-[#185519] p-3 rounded-md drop-shadow-md">
                                     Variant Name: {variant.name}
@@ -156,9 +177,10 @@ function ProductInventory() {
                                         className="ml-3 text-black rounded-sm outline-none px-2"
                                         placeholder="0"
                                         type="number"
-                                        value={outStockValues[variant.id] || ''}
-                                        onChange={(e) => handleOutStockChange(variant.id, e)}
+                                        value={variant.outStock || ''}  
+                                        onChange={(e) => handleOutStockChange(index, e.target.value)}  
                                     />
+                                    <div className='hidden'>{outStockValues}</div>
                                 </div>
                             </div>
                         ))}

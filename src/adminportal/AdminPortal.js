@@ -38,7 +38,7 @@ function AdminPortal() {
           <AdminNavbar setSelectedView={setSelectedView}  />
         </div>
         <div className=' pt-16 flex-grow overflow-x-hidden'  style={appStyle}>
-          {selectedView === "ca" && <h1 className='w-full rounded-lg overflow-hidden '><CreateAccount /></h1>}
+          {selectedView === "ca" && <h1 className='w-full'><CreateAccount /></h1>}
           {selectedView === 'dashboard' && <Dashboard setSelectedView={setSelectedView} />}
           {selectedView === 'clist' && <h1 className='flex w-full text-2xl p-5'><CustomerListChild /></h1>}
           {selectedView === 'wp' && <WalaPa />}
